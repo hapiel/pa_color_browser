@@ -15,7 +15,8 @@ const imageSchema = new Schema({
     height: {type: Number},
     sizeMinTrans: {type: Number},
     trans: {type: Boolean},
-    width: {type: Number}
+    width: {type: Number},
+    url: {type: String}
 })
 
 const imageModel = mongoose.model('Image', imageSchema, 'pixeldb');
