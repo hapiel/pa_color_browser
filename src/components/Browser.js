@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
+import { ChromePicker } from 'react-color';
 
 export default function Browser() {
     const [state, setState] = useState([]);
@@ -11,7 +12,10 @@ export default function Browser() {
     },[])
 
     return (
-        <ShowArtworks/>      
+        <>
+            <ChromePicker color={'#ffffff'}/>
+            <ShowArtworks/>  
+        </>
     )
 
     function ShowArtworks() {
@@ -21,7 +25,7 @@ export default function Browser() {
         return state.map((image, i) =>
             <div key={i}>
                 <h1>{image.title}</h1>
-                <img src={image.url}></img>
+                <img src={image.url} alt={image.title}></img>
             </div> 
         );
     }
