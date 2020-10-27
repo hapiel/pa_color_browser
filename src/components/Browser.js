@@ -46,6 +46,6 @@ export default function Browser() {
             throw new ValidationError("Failed");
         }
 
-        Api.get('http://localhost:5000/images/react', validator, onSucces, onFailure)
+        Api.get('/api/react', validator, onSucces, onFailure)
     }
 }
