@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -20,12 +21,14 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 });
 
+app.use(express.static('./frontend/build'));
+
 const imagesRouter = require('./routes/images');
 app.use('/api', imagesRouter);
 
-app.use(express.static(path.join(__dirname, '../build')))
+app.use(express.static(path.join(__dirname, './frontend/build')))
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build'))
+  res.sendFile(path.join(__dirname, './frontend/build'))
 })
 
 app.listen(port, () => {
