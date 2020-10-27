@@ -20,7 +20,7 @@ export default function Browser() {
 
     function ShowArtworks() {
         if (isLoading) {
-          return <h1>Loading...</h1>
+            return <h1>Loading...</h1>
         } 
         return state.map((image, i) =>
             <div key={i}>
@@ -46,6 +46,6 @@ export default function Browser() {
             throw new ValidationError("Failed");
         }
 
-        Api.get('/api/react', validator, onSucces, onFailure)
+        Api.get('/api/yellow', validator, onSucces, onFailure)
     }
 }
