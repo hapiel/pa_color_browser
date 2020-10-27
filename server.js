@@ -22,9 +22,9 @@ connection.once('open', () => {
 });
 
 // add this line
-app.use(express.static('frontend/build'));
+app.use(express.static('./frontend/build'));
 
-const imagesRouter = require('routes/images');
+const imagesRouter = require('./routes/images');
 app.use('/api', imagesRouter);
 
 app.listen(port, () => {
