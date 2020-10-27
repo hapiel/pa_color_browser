@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = "mongodb+srv://admin-daniel:B9jrB3NuzjGQzx9x@cluster0.8gxvz.azure.mongodb.net/pixeldb";
+const uri = process.env.ATLAS_URI
 
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true});
 
