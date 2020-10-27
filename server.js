@@ -21,13 +21,11 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 });
 
+// add this line
+app.use(express.static('frontend/build'));
+
 const imagesRouter = require('routes/images');
 app.use('/api', imagesRouter);
-
-app.use(express.static(path.join(__dirname, 'frontend/build')))
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/build'))
-})
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
