@@ -3,7 +3,6 @@ import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import { ChromePicker } from 'react-color';
 import Color from './Color';
-import Color2 from './Color2';
 
 export default function Browser() {
     const [state, setState] = useState([]);
