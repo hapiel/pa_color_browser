@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const path = require('path');
 
 require('dotenv').config();
 
@@ -21,7 +20,6 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 });
 
-// add this line
 app.use(express.static('./frontend/build'));
 
 const imagesRouter = require('./routes/images');
