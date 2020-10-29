@@ -1,10 +1,19 @@
 html, body, :root {
     height: 100%;
-    
 }
 
 :root{
   background-color: #3A3A3C;
+}
+
+#search-button{
+  background-color: #dddddd;
+  border: 5px solid #333333;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  width: 12.5%;
+  height: 35px;
 }
 
 img {

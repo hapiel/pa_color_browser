@@ -9,22 +9,20 @@ export default function Browser() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(()=>{
-        getImages()
+        //getImages()
     },[])
 
     return (
         <>
-            <Color/>
+            <Color getImages={getImages}/>
+            
             <div className="flex-container">
-            <ShowArtworks/>  
+                <ShowArtworks/>  
             </div>
         </>
     )
 
-
-
     function ShowArtworks() {
-        
         if (isLoading) {
             return <h3>Loading...</h3>
         } 
@@ -50,14 +48,14 @@ export default function Browser() {
         );
     }
 
-    function getImages(){
+    function getImages(colorArray){
+        console.log(colorArray)
         function validator(response){
-            if(!response.data){
-                throw new ValidationError("No data");
-            }
+
         }
 
         function onSucces(response){
+            console.log(response)
             setState(response.data);
             setIsLoading(false);
         }
@@ -66,7 +64,7 @@ export default function Browser() {
             throw new ValidationError("Failed");
         }
 
-        Api.get('/api/yellow', validator, onSucces, onFailure)
+        Api.get('/api', validator, onSucces, onFailure, {headers:{'colorarray': colorArray}})
     }
 
     function zoomIn(id) {

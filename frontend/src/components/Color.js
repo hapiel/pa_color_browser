@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import '../CSS/color.css';
 
-export default function Color(){
+export default function Color({getImages}){
     const [showPicker, setShowPicker] = useState(false);
     const [currentColor, setCurrentColor] = useState();
     const [colorArray, setColorArray] = useState([]);
@@ -34,13 +34,12 @@ export default function Color(){
     function ShowPallete() {
         if(colorArray.length){
             return colorArray.map((color, i) =>
-            
-            <div id="swatch" style={{
-                    backgroundColor: color, 
-                    border: i===selectedColorIndex?'5px solid rgba(255,255,255,1)':'5px solid rgba(255,255,255,0)'
-                }} onClick={()=>adjustColor(i)} key={i}>
-                <div id="color"></div>
-            </div>
+                <div id="swatch" style={{
+                        backgroundColor: color, 
+                        border: i===selectedColorIndex?'5px solid rgba(255,255,255,1)':'5px solid rgba(255,255,255,0)'
+                    }} onClick={()=>adjustColor(i)} key={i}>
+                    <div id="color"></div>
+                </div>
             );
         }
         return null
@@ -61,7 +60,7 @@ export default function Color(){
                 </div>
                 :null
             }
-
+            <button id="search-button" onClick={()=>getImages(colorArray)}>search</button>
         </div>
     )
 }
