@@ -1,14 +1,29 @@
-#swatch {
-    padding: 5px;
-    border-radius: 1px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
-    display: inline-block;
+#colorsearch{
+    padding: 16px;
+    background-color: #999999;
+}
+#palette{
+    display: flex;
+    flex-direction: row;
+    height: 35px;
+}
+
+#add-color-button{
+    background-color: #dddddd;
+    border: 5px solid #333333;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
+    width: 12.5%;
+}
+
+#swatch {
+    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+    cursor: pointer;
+    width: 12.5%;
 }
 
 #color {
-    width: 200px;
-    height: 100px;
     border-radius: 2px;
 }
 #popover {

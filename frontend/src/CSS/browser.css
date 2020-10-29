@@ -1,3 +1,12 @@
+html, body, :root {
+    height: 100%;
+    
+}
+
+:root{
+  background-color: #3A3A3C;
+}
+
 img {
   image-rendering: optimizeSpeed;
   image-rendering: -moz-crisp-edges;
@@ -8,7 +17,8 @@ img {
 }
 
 .flex-container{
-
+  
+  color: whitesmoke;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;

@@ -4,35 +4,41 @@ import '../CSS/color.css';
 
 export default function Color(){
     const [showPicker, setShowPicker] = useState(false);
-    const [currentColor, setCurrentColor] = useState('#FFFFFF');
+    const [currentColor, setCurrentColor] = useState();
     const [colorArray, setColorArray] = useState([]);
     const [selectedColorIndex, setSelectedColorIndex] = useState();    
 
     function handleClick(){
-        setShowPicker(!showPicker)
+        setColorArray([...colorArray, '#FFFFFF'])
+        setCurrentColor('#FFFFFF');
+        setSelectedColorIndex(colorArray.length);
+        setShowPicker(true);
     };
 
     function handleChange(color){
         setCurrentColor(color.hex);
+        colorArray[selectedColorIndex] = currentColor;
     };
 
     function handleClose(){
-        setShowPicker(false)
-        colorArray.push(currentColor);
+        setShowPicker(false);
+        setSelectedColorIndex();
     };
 
-    function changeSelectedColor(index){
+    function adjustColor(index){
         setSelectedColorIndex(index);
-        //setCurrentColor(colorArray[index]);
+        setCurrentColor(colorArray[index]);
+        setShowPicker(!showPicker);
     }
 
     function ShowPallete() {
         if(colorArray.length){
             return colorArray.map((color, i) =>
+            
             <div id="swatch" style={{
                     backgroundColor: color, 
                     border: i===selectedColorIndex?'5px solid rgba(255,255,255,1)':'5px solid rgba(255,255,255,0)'
-                }} onClick={()=>changeSelectedColor(i)} key={i}>
+                }} onClick={()=>adjustColor(i)} key={i}>
                 <div id="color"></div>
             </div>
             );
@@ -41,17 +47,21 @@ export default function Color(){
     }
     
     return(
-        <div>
-            <ShowPallete />
+        <div id={"colorsearch"}>
+            <h2>Color</h2>
+            <div id={"palette"}>
+                <ShowPallete />
+                <button id="add-color-button" onClick={handleClick}>+</button> 
+            </div>
+
             {showPicker ?
                 <div id="popover">
                     <div id="cover" onClick={handleClose}/>
                     <ChromePicker color={currentColor} onChange={handleChange} disableAlpha={true}/>
                 </div>
                 :null
-            } 
+            }
 
-            <button onClick={handleClick}>+</button>
         </div>
     )
 }
