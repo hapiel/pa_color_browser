@@ -1,0 +1,26 @@
+img {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.flex-container{
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.pixel-result{
+  margin: 1em;
+}
+
+.artwork{
+  text-align: center;
+}
+.zoom-buttons{
+  text-align: center;
+}
