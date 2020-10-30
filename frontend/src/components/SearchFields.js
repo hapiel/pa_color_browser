@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SearchFields(){
     return(
-        <div >
+        <div className="top-bar">
             <form className="search-container">
                 <div className="search-element">
                     <label for="title">Search title: </label>
