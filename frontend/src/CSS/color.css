@@ -2,6 +2,8 @@
     padding: 16px;
     background-color: #999999;
 }
+
+
 #palette{
     display: flex;
     flex-direction: row;

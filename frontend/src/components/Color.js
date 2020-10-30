@@ -46,7 +46,7 @@ export default function Color({getImages}){
     }
     
     return(
-        <div id={"colorsearch"}>
+        <div className="top-bar">
             <h2>Color</h2>
             <div id={"palette"}>
                 <ShowPallete />

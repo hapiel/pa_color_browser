@@ -25,12 +25,27 @@ img {
   -ms-interpolation-mode: nearest-neighbor;
 }
 
+
 .flex-container{
-  
   color: whitesmoke;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+.search-container{
+  display: inline-block;
+  margin: 0 1em;
+}
+
+.search-element{
+  text-align: right;
+  margin: 0.3em;
+}
+
+.top-bar{
+  padding: 16px;
+  background-color: #999999;
 }
 
 .pixel-result{
