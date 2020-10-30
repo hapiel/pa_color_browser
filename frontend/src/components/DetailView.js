@@ -18,8 +18,8 @@ export default function SearchFields(){
         <div className="image-large">
           <img src={image.url} alt={image.title} id={image.pjId} ></img>
           <div className="zoom-buttons">
-              <button type="button" onClick={()=>zoomIn(pjId)}>+</button>
-              <button type="button" onClick={()=>zoomOut(pjId)}>-</button>
+              {/* <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
+              <button type="button" onClick={()=>zoomOut(image.pjId)}>-</button> */}
           </div>
           <div className="image-metadata">
             <h2>{image.title}</h2>

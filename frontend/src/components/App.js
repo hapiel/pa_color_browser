@@ -1,5 +1,6 @@
 import React from 'react';
 import Browser from '../components/Browser';
+import DetailView from '../components/DetailView';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <Router>
       <Switch>
         <Route path="/" exact component={Browser}/>
+        <Route path="/detailview" exact component={DetailView}/>
       </Switch>
     </Router>
   );
