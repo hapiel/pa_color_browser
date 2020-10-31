@@ -22,22 +22,24 @@ function hexToRgb(hex){
 router.route('/').get((req, res) => {
   let colorsString = req.headers.colorarray;
   let colorArray = colorsString.split(',');
-
-  for (const color in colorArray) {
-    console.log(hexToRgb(colorArray[color]));
-  }
-  
+  let query = {'$and': []};
   const minPercent = 3;
   const tolerance = 3;
 
-  Image.find(
-    { colors: { $elemMatch: { "$and": [ 
-      {"rgb.0": {$gte: r-tolerance, $lte: r+tolerance}}, 
-      {"rgb.1": {$gte: g-tolerance, $lte: g+tolerance}}, 
-      {"rgb.2": {$gte: b-tolerance, $lte: b+tolerance}}, 
-      {percent: {$gte: minPercent}}] } } }
-  ).then(images => res.json(images))
-  .catch(err => res.status(400).json('Error: ' + err));
+  for (const color in colorArray) {
+    let rgb = hexToRgb(colorArray[color]);
+      query['$and'].push(
+        { colors: { $elemMatch: { "$and": [ 
+          {"rgb.0": {$gte: rgb[0]-tolerance, $lte: rgb[0]+tolerance}}, 
+          {"rgb.1": {$gte: rgb[1]-tolerance, $lte: rgb[1]+tolerance}}, 
+          {"rgb.2": {$gte: rgb[2]-tolerance, $lte: rgb[2]+tolerance}}, 
+          {percent: {$gte: minPercent}},
+        ]}}},
+      );
+  }
+
+  Image.find(query).then(images => res.json(images))
+  .catch(err => res.status(400).json('Error: ' + err));;
 });
 
 module.exports = router;
