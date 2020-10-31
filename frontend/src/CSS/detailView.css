@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
+
+a {
+  color: rgb(59, 59, 59);
+}
+
+a:hover {
+  color: black;
+}
+
+.color-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.color-tile{
+  font-family: 'PT Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  
+  margin: 5px 10px 5px 0;
+  padding: 5px 8px;
+  line-height: 22px;
+  vertical-align: middle;
+}
+
+.hover-visible{
+  background: inherit;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: invert(1) grayscale(1) contrast(8);
+  opacity: 0;
+}
+
+.icon{
+  background: inherit;
+  color: white;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: invert(1) grayscale(1) contrast(8);
+}
+
+.hover-visible:hover{
+  opacity: 1;
+}
+
+.detail-view{
+  background-color: rgb(139, 139, 139);
+}
+
+.detail-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.image-large{
+  flex-basis: 50%;
+  flex-grow: 1;
+  text-align: center;
+  align-self: center;
+}
+
+.image-metadata{
+  flex-basis: 50%;
+  flex-grow: 1;
+  max-width: 70%;
+}
+.select-all{
+  float: right;
+  text-align: right;
+}
