@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Switch>
         <Route path="/" exact component={Browser}/>
-        <Route path="/detailview" exact component={DetailView}/>
+        <Route path="/detail/:id" exact component={DetailView}/>
       </Switch>
     </Router>
   );

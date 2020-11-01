@@ -34,13 +34,11 @@ export default function Browser() {
     }
 
     function getImages(colorArray){
-        console.log(colorArray)
         function validator(response){
 
         }
 
         function onSucces(response){
-            console.log(response)
             setState(response.data);
             setIsLoading(false);
         }
@@ -51,7 +49,4 @@ export default function Browser() {
 
         Api.get('/api', validator, onSucces, onFailure, {headers:{'colorarray': colorArray}})
     }
-
-    
-
 }
