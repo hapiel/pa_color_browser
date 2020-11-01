@@ -18,7 +18,7 @@ export default function Browser() {
         <>
             <Color getImages={getImages}/>
             <SearchFields/>
-            <div className="flex-container">
+            <div className="grid-container">
                 <ShowArtworks/>  
             </div>
         </>

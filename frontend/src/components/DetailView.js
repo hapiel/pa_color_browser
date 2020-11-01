@@ -74,8 +74,8 @@ export default function DetailView(){
                     <div className="image-large">
                     <img src={image.url} alt={image.title} id={image.pjId} ></img>
                     <div className="zoom-detail">
-                        <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
                         <button type="button" onClick={()=>zoomOut(image.pjId)}>-</button>
+                        <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
                         <br/>
                         zoom
                     </div>

@@ -23,8 +23,8 @@ router.route('/').get((req, res) => {
   let colorsString = req.headers.colorarray;
   let colorArray = colorsString.split(',');
   let query = {'$and': []};
-  const minPercent = 0;
-  const tolerance = 5;
+  const minPercent = 0.1;
+  const tolerance = 4;
 
   for (const color in colorArray) {
     let rgb = hexToRgb(colorArray[color]);

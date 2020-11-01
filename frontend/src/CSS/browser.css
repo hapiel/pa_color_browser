@@ -23,14 +23,45 @@ img {
   image-rendering: optimize-contrast;
   image-rendering: pixelated;
   -ms-interpolation-mode: nearest-neighbor;
+  vertical-align: middle;
 }
 
 
-.flex-container{
-  color: whitesmoke;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+.grid-container{
+  justify-content: center;   
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 128px);
+  gap: 10px;
+  grid-auto-flow: dense;
+  
+}
+
+.fit{
+  object-fit: none;
+}
+
+.art-grid{
+  background-color: #464646;
+  text-align: center;
+  
+  display: inline;
+  height:100%;
+  min-height: 128px;
+}
+
+
+.grid-w2{
+  grid-column-start: span 2;
+}
+
+.grid-h2{
+  grid-row-end: span 2;
+}
+
+.helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
 }
 
 .search-container{
@@ -48,9 +79,7 @@ img {
   background-color: #999999;
 }
 
-.pixel-result{
-  margin: 1em;
-}
+
 
 .artwork{
   text-align: center;
