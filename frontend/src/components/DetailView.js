@@ -371,9 +371,7 @@ export default function DetailView(){
         
         <div className="hover-visible">
           <CopyToClipboard text={col.hex} onCopy={()=>selectColor(i)}>
-            <span>
-              {/* How can we make this a space instead of a 0? */}
-              {(Math.round(col.percent)<10)? "0" : ""}
+            <span className={(Math.round(col.percent)<10)? "add-space" : ""}>
               {Math.round(col.percent)}% {col.hex} 
             </span> 
           </CopyToClipboard>
