@@ -19,10 +19,11 @@ a:hover {
   text-transform: uppercase;
   
   margin: 5px 10px 5px 0;
-  padding: 5px 8px;
+  padding: 2px 8px;
   line-height: 22px;
   vertical-align: middle;
 }
+
 
 .hover-visible{
   background: inherit;
@@ -70,4 +71,14 @@ a:hover {
 .select-all{
   float: right;
   text-align: right;
+}
+
+.select{
+  border: 4px solid rgba(255,255,255,1);
+  position: relative;
+  outline: 2px solid rgb(0, 0, 0);
+}
+
+.deselect{
+  border: 4px solid rgba(255,255,255,0);
 }

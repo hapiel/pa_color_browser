@@ -10,8 +10,10 @@ export default function DetailView(){
   function selectColor(index){
     if (selectedColors.includes(index)) {
       setSelectedColors(selectedColors.filter(function(e) { return e !== index; }))
+      console.log("removed")
     } else {
       selectedColors.push(index);
+      console.log("set")
     }
     console.log(selectedColors);
   }
@@ -367,7 +369,7 @@ export default function DetailView(){
 
   for (const [i, col] of image.colors.entries()) {
     colorDivs.push(
-      <div key={i} id={i} className="color-tile" style={{backgroundColor: col.hex}}>
+      <div key={i} id={i} className={selectedColors.includes(i) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: col.hex}}>
         
         <div className="hover-visible">
           <CopyToClipboard text={col.hex} onCopy={()=>selectColor(i)}>
@@ -416,7 +418,9 @@ export default function DetailView(){
       <div className="related-art">
         RELATED ARTWORKS GO HERE
       </div>
-    </div>        
+    </div>  
+    
+    
   )
 
     function zoomIn(id) {
