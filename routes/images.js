@@ -23,8 +23,8 @@ router.route('/').get((req, res) => {
   let colorsString = req.headers.colorarray;
   let colorArray = colorsString.split(',');
   let query = {'$and': []};
-  const minPercent = 3;
-  const tolerance = 3;
+  const minPercent = 0;
+  const tolerance = 5;
 
   for (const color in colorArray) {
     let rgb = hexToRgb(colorArray[color]);
@@ -39,7 +39,15 @@ router.route('/').get((req, res) => {
   }
 
   Image.find(query).then(images => res.json(images))
-  .catch(err => res.status(400).json('Error: ' + err));;
+  .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+router.route('/:id').get((req, res) => {
+  const pjId = req.params.id
+
+  Image.findOne({"pjId": pjId}).then(images => res.json(images))
+  .catch(err => res.status(400).json('Error: ' + err));    
 });
 
 module.exports = router;
