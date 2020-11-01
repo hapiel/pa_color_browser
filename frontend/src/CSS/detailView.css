@@ -21,9 +21,11 @@ a:hover {
   font-family: 'PT Mono', monospace;
   font-size: 12px;
   text-transform: uppercase;
+  font-smooth: never;
+  -webkit-font-smoothing : none;
   
   margin: 5px 10px 5px 0;
-  padding: 2px 8px;
+  
   line-height: 22px;
   vertical-align: middle;
 }
@@ -34,12 +36,14 @@ a:hover {
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  filter: invert(1) grayscale(1) contrast(9);
+  filter: invert(1) grayscale(1) contrast(20) ;
   opacity: 0;
+  padding: 2px 8px;
 }
 
 .hover-visible:hover{
   opacity: 1;
+  padding: 2px 8px;
 }
 
 .detail-view{

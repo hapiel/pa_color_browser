@@ -14,19 +14,6 @@ export default function DetailView(){
     useEffect(()=>{
         getImage(id)
     },[])
-  
-  function selectColor(index){
-    if (selectedColors.includes(index)) {
-      setSelectedColors(selectedColors.filter(function(e) { return e !== index; }))
-      console.log("removed")
-    } else {
-      selectedColors.push(index);
-      console.log("set")
-    }
-    console.log(selectedColors);
-  }
-  
-  
 
     function ShowDetail() {
         if (isLoading) {
@@ -34,32 +21,50 @@ export default function DetailView(){
         } 
         return <Details/>
     }
+  
+    function selectColor(index){
+        if (selectedColors.includes(index)) {
+            setSelectedColors(selectedColors.filter(function(e) { return e !== index; }))
+            console.log("removed")
+        } else {
+            selectedColors.push(index);
+            console.log("set")
+        }
+        console.log(selectedColors);
+    }
 
+    function Palette(){
+        return image.colors.map((color, i) =>
+            <div key={i} id={i} className={selectedColors.includes(i) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}}>         
+                <div className="hover-visible">
+                    <CopyToClipboard text={color.hex} onCopy={()=>selectColor(i)}>
+                        <span className={(Math.round(color.percent)<10)? "add-space" : ""}>
+                            {Math.round(color.percent)}% {color.hex} 
+                        </span> 
+                    </CopyToClipboard>
+                </div>
+            </div>
+        );
+    }
+
+    function Tags(){
+        return(
+            <p>Tags: {image.tags.map((tag, i) =>
+                    <> 
+                        <a key={i} href='#'>{tag}</a>
+                        {i < image.tags.length - 1 && <>, </>}
+                    </>
+                )}
+            </p>
+        )
+    }
+  
     function Details(){
         const tagLinks = [];
-        const colorDivs = [];
 
         for (const [i, tag] of image.tags.entries()) {
             tagLinks.push(<a key={i} href='#'>{tag}</a>)
         }
-
-        for (const [i, col] of image.colors.entries()) {
-            colorDivs.push(
-            <div key={i} id={i} className={selectedColors.includes(i) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: col.hex}}>
-                
-                <div className="hover-visible">
-                <CopyToClipboard text={col.hex} onCopy={()=>selectColor(i)}>
-                    <span className={(Math.round(col.percent)<10)? "add-space" : ""}>
-                    {Math.round(col.percent)}% {col.hex} 
-                    </span> 
-                </CopyToClipboard>
-                
-                </div>
-                
-            </div>
-            )
-        }
-
         return(
             <div className="detail-view">
                 <div className ="return-bar">
@@ -80,9 +85,11 @@ export default function DetailView(){
                         <h2>{image.title}</h2>
                         <h3>Created by <a href="#">{image.author}</a></h3>
                         <p>{image.desc}</p>
-                        <p>Tags: {tagLinks.map((tag, i) => [i > 0 && ", ", tag])}</p>
+                        <Tags/>
                     </div>
-                    <div className="color-wrapper">{colorDivs}</div>
+                    <div className="color-wrapper">
+                        <Palette/>
+                    </div>
                     
                     <button>Search with selected colors</button>
                     <span className="select-all"><a href="#">select all</a></span>
@@ -94,9 +101,6 @@ export default function DetailView(){
             </div> 
         )
     }
-    return(
-        <ShowDetail/>
-    )
 
     function zoomIn(id) {
         var img = document.getElementById(id);
@@ -104,17 +108,17 @@ export default function DetailView(){
         img.style.width = (width * 2) + "px";
     }
 
-  function zoomOut(id) {
-      var img = document.getElementById(id);
-      var width = img.clientWidth;
-      if (width === img.naturalWidth) return false;
-      img.style.width = (width / 2) + "px";
-  }
+    function zoomOut(id) {
+        var img = document.getElementById(id);
+        var width = img.clientWidth;
+        if (width === img.naturalWidth) return false;
+        img.style.width = (width / 2) + "px";
+    }
 
-  function textCopied(i){
-    //ok this needs to be improved
-    // document.getElementById(i).firstElementChild.innerHTML = "Hex copied";
-  }
+    // main render
+    return(
+        <ShowDetail/>
+    )
 
     function getImage(id){
         function validator(response){
