@@ -34,16 +34,8 @@ a:hover {
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  filter: invert(1) grayscale(1) contrast(8);
+  filter: invert(1) grayscale(1) contrast(9);
   opacity: 0;
-}
-
-.icon{
-  background: inherit;
-  color: white;
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: invert(1) grayscale(1) contrast(8);
 }
 
 .hover-visible:hover{
