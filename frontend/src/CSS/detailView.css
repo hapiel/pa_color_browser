@@ -21,8 +21,6 @@ a:hover {
   font-family: 'PT Mono', monospace;
   font-size: 12px;
   text-transform: uppercase;
-  font-smooth: never;
-  -webkit-font-smoothing : none;
   
   margin: 5px 10px 5px 0;
   

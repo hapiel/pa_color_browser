@@ -27,7 +27,7 @@ export default function DetailView(){
             setSelectedColors(selectedColors.filter(function(e) { return e !== index; }))
             console.log("removed")
         } else {
-            selectedColors.push(index);
+            setSelectedColors([...selectedColors, index]);
             console.log("set")
         }
         console.log(selectedColors);
@@ -36,8 +36,8 @@ export default function DetailView(){
     function Palette(){
         return image.colors.map((color, i) =>
             <div key={i} id={i} className={selectedColors.includes(i) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}}>         
-                <div className="hover-visible">
-                    <CopyToClipboard text={color.hex} onCopy={()=>selectColor(i)}>
+                <div className="hover-visible" onClick={()=>selectColor(i)}>
+                    <CopyToClipboard text={color.hex}>
                         <span className={(Math.round(color.percent)<10)? "add-space" : ""}>
                             {Math.round(color.percent)}% {color.hex} 
                         </span> 
