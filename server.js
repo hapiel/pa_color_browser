@@ -23,12 +23,12 @@ connection.once('open', () => {
 
 //app.use(express.static('./frontend/build'));
 
+const imagesRouter = require('./routes/images');
+app.use('/api', imagesRouter);
+
 app.get('/*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/frontend/build/index.html'))
 })
-
-const imagesRouter = require('./routes/images');
-app.use('/api', imagesRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
