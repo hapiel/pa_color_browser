@@ -26,9 +26,7 @@ connection.once('open', () => {
 const imagesRouter = require('./routes/images');
 app.use('/api', imagesRouter);
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/frontend/build/index.html'))
-})
+app.use(express.static(__dirname + '/frontend/build'));
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
