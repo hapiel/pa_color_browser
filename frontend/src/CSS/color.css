@@ -3,21 +3,21 @@
     background-color: #999999;
 }
 
-
 #palette{
     display: flex;
     flex-direction: row;
-    height: 35px;
     margin-bottom: 20px;
 }
 
-#add-color-button{
+.button-large{
     background-color: #dddddd;
     border: 5px solid #333333;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
     width: 12.5%;
+    margin-right: 1em;
+    height: 38px;
 }
 
 #swatch {
@@ -26,8 +26,9 @@
     width: 12.5%;
 }
 
-#color {
+.color {
     border-radius: 2px;
+    height: 28px;
 }
 #popover {
     position: absolute;
@@ -42,3 +43,7 @@
     left: 0;
 }
 
+.color-search-container{
+    display: flex;
+    flex-wrap: wrap;
+}

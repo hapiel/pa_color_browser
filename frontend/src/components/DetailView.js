@@ -25,12 +25,20 @@ export default function DetailView(){
     function selectColor(index){
         if (selectedColors.includes(index)) {
             setSelectedColors(selectedColors.filter(function(e) { return e !== index; }))
-            console.log("removed")
         } else {
             setSelectedColors([...selectedColors, index]);
-            console.log("set")
         }
         console.log(selectedColors);
+    }
+    function selectAll(){
+        const allIndexes = []
+        for (let i = 0; i < image.colors.length; i++) {
+            allIndexes.push(i);
+        }
+        setSelectedColors(allIndexes);
+    }
+    function deselectAll(){
+        setSelectedColors([]);
     }
 
     function Palette(){
@@ -68,7 +76,7 @@ export default function DetailView(){
         return(
             <div className="detail-view">
                 <div className ="return-bar">
-                    return to search
+                    <a href="../">return to search</a>
                 </div>
                 <div className="detail-container">
                     <div className="image-large">
@@ -90,9 +98,11 @@ export default function DetailView(){
                     <div className="color-wrapper">
                         <Palette/>
                     </div>
-                    
-                    <button>Search with selected colors</button>
-                    <span className="select-all"><a href="#">select all</a></span>
+                        
+                        <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
+                        <span className="select-all">
+                            <a href="#" onClick={()=>selectAll()}>select all</a>, <a href="#" onClick={()=>deselectAll()}>deselect all</a>
+                        </span>
                     </div>
                 </div>
                 <div className="related-art">

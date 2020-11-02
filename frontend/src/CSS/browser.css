@@ -28,6 +28,8 @@ img {
 
 
 .grid-container{
+  margin: 40px 0px 40px 0px;
+  color: whitesmoke;
   justify-content: center;   
   display: grid;
   grid-template-columns: repeat(auto-fill, 128px);
@@ -49,7 +51,6 @@ img {
   min-height: 128px;
 }
 
-
 .grid-w2{
   grid-column-start: span 2;
 }
@@ -66,20 +67,19 @@ img {
 
 .search-container{
   display: inline-block;
-  margin: 0 1em;
+  margin-bottom: 20px;
 }
 
 .search-element{
-  text-align: right;
   margin: 0.3em;
 }
 
 .top-bar{
   padding: 16px;
   background-color: #999999;
+  display: flex;
+  flex-direction: column;
 }
-
-
 
 .artwork{
   text-align: center;

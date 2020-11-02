@@ -1,26 +1,72 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-export default function SearchFields(){
+const useSlider = (min, max, defaultState, label, id) => {
+    const [state, setSlide] = useState(defaultState);
+    const handleChange = e => {
+        setSlide(e.target.value);
+    }
+  
+    const props = { 
+      type: 'range',
+      id,
+      min,
+      max,
+      step: 1,
+      value: state,
+      onChange: handleChange
+    }
+    return props
+}
+
+export default function SearchFields({setTolerance, setKeyword, setAuthor}){
+    const [keywordValue, setKeywordValue] = useState("");
+    const [authorValue, setAuthorValue] = useState("");
+    const sliderProps = useSlider(0, 20, 4, "Threshold", 'threshold');
+
+    const onKeyword = event => {
+        setKeywordValue(event.target.value);
+    };
+
+    const onAuthor = event => {
+        setAuthorValue(event.target.value);
+    };
+
+    useEffect(()=>{
+        setTolerance(sliderProps.value);
+    },[sliderProps.value])
+
+    useEffect(()=>{
+        setKeyword(keywordValue);
+    },[keywordValue])
+
+    useEffect(()=>{
+        setAuthor(authorValue);
+    },[authorValue])
+
     return(
-        <div className="top-bar">
-            <form className="search-container">
-                <div className="search-element">
-                    <label for="title">Search title: </label>
-                    <input type="text" id="title" name="title" />
-                </div> 
-                <div className="search-element">
-                    <label for="author">Search author: </label>
-                    <input type="text" id="author" name="author" />
-                </div>
-                <div className="search-element"> 
-                    <label for="keyword">Search keyword: </label>
-                    <input type="text" id="keyword" name="keyword" />
-                </div>
-                <div className="search-element">
-                    <label for="searchAll">Search any field (also description): </label>
-                    <input type="text" id="searchAll" name="searchAll" />
-                </div>
-            </form>
-        </div>        
+        <div className="search-container">
+            <div className="search-element">
+                <label for="searchAll">Color tolerance: </label>
+                <label>{sliderProps.value}</label>
+                <input {...sliderProps}/>
+            </div>
+             {/* <div className="search-element">
+                <label for="title">Search title: </label>
+                <input type="text" id="title" name="title" />
+            </div>
+            <div className="search-element"> 
+                <label for="keyword">Search keyword: </label>
+                <input type="text" id="keyword" name="keyword" />
+            </div>   */}
+            <div className="search-element">
+                <label for="searchAll">Keyword: </label>
+                <input type="text" id="searchAll" name="searchAll" onChange={onKeyword} value={keywordValue}/>
+            </div>
+            <div className="search-element">
+                <label for="author">Search author: </label>
+                <input type="text" id="searchAll" name="searchAll" onChange={onAuthor} value={authorValue}/>
+            </div>
+
+        </div>     
     )
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import '../CSS/color.css';
 
-export default function Color({getImages}){
+export default function Color({setColorPalette}){
     const [showPicker, setShowPicker] = useState(false);
     const [currentColor, setCurrentColor] = useState();
     const [colorArray, setColorArray] = useState([]);
@@ -23,6 +23,7 @@ export default function Color({getImages}){
     function handleClose(){
         setShowPicker(false);
         setSelectedColorIndex();
+        setColorPalette(colorArray);
     };
 
     function adjustColor(index){
@@ -38,19 +39,26 @@ export default function Color({getImages}){
                         backgroundColor: color, 
                         border: i===selectedColorIndex?'5px solid rgba(255,255,255,1)':'5px solid rgba(255,255,255,0)'
                     }} onClick={()=>adjustColor(i)} key={i}>
-                    <div id="color"></div>
+                    <div className="color"></div>
                 </div>
             );
         }
         return null
     }
+
+    function removeAll(){
+        setColorArray([]);
+        setColorPalette([]);
+    }
     
     return(
-        <div className="top-bar">
+        <div>
             <h2>Color</h2>
-            <div id={"palette"}>
+            <div id={"palette"} className="color-search-container">
                 <ShowPallete />
-                <button id="add-color-button" onClick={handleClick}>+</button> 
+                <button className="button-large" onClick={handleClick}>+</button>
+                <button className="button-large" onClick={()=>removeAll()}>REMOVE ALL</button>
+                
             </div>
 
             {showPicker ?
@@ -60,7 +68,6 @@ export default function Color({getImages}){
                 </div>
                 :null
             }
-            <button id="search-button" onClick={()=>getImages(colorArray)}>search</button>
         </div>
     )
 }

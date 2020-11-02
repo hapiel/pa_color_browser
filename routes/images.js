@@ -22,10 +22,16 @@ function hexToRgb(hex){
 router.route('/').get((req, res) => {
   let colorsString = req.headers.colorarray;
   let colorArray = colorsString.split(',');
+  let tolerance = parseInt(req.headers.tolerance);
+  let keyword = new RegExp(req.headers.keyword, 'i');
+  let author = new RegExp(req.headers.author, 'i');
   let query = {'$and': []};
   const minPercent = 0.1;
-  const tolerance = 4;
+  let page = 1;
 
+  query['$and'].push({title: {$regex: keyword}})
+  query['$and'].push({author: {$regex: author}})
+  
   for (const color in colorArray) {
     let rgb = hexToRgb(colorArray[color]);
       query['$and'].push(
@@ -38,7 +44,7 @@ router.route('/').get((req, res) => {
       );
   }
 
-  Image.find(query).then(images => res.json(images))
+  Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
