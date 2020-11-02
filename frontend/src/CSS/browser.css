@@ -26,16 +26,13 @@ img {
   vertical-align: middle;
 }
 
-
 .grid-container{
-  margin: 40px 0px 40px 0px;
   color: whitesmoke;
   justify-content: center;   
   display: grid;
   grid-template-columns: repeat(auto-fill, 128px);
   gap: 10px;
   grid-auto-flow: dense;
-  
 }
 
 .fit{
@@ -66,8 +63,18 @@ img {
 }
 
 .search-container{
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
+}
+
+.search-labels{
+  margin-right: 1em;
+}
+
+.search-labels, .search-inputs{
+  display: flex;
+  flex-direction: column;
 }
 
 .search-element{

@@ -13,7 +13,7 @@ export default function DetailView(){
   
     useEffect(()=>{
         getImage(id)
-    },[])
+    },[id])
 
     function ShowDetail() {
         if (isLoading) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
@@ -9,7 +9,7 @@ import '../CSS/browser.css';
 export default function Browser() {
     const [state, setState] = useState([]);
     //0 = results, 1 = loading, 2 =  no images, 3 = app start
-    const [isLoading, setIsLoading] = useState(4);
+    const [isLoading, setIsLoading] = useState(3);
     const [colorPalette, setColorPalette] = useState();
     const [tolerance, setTolerance] = useState();
     const [keyword, setKeyword] = useState();
@@ -18,30 +18,35 @@ export default function Browser() {
     return (
         <>
             <div className="top-bar">
+                
                 <Color setColorPalette={setColorPalette}/>
                 <SearchFields setTolerance={setTolerance} setKeyword={setKeyword} setAuthor={setAuthor}/>
                 <button id="search-button" onClick={()=>getImages()}>search</button>
             </div>
             
-            <div className="grid-container">
-                <ShowArtworks/>  
-            </div>
+            <ShowArtworks/>  
         </>
     )
 
     function ShowArtworks() {
-        if (isLoading === 1) {
-            return <h3>Loading...</h3>
-        } 
-        if (isLoading === 2) {
-            return <span><h3>No results. </h3> <p> Consider increasing the color tolerance, or removing colors</p></span>
-        } 
-        if (isLoading === 3) {
-            return <h3>Enter search query above </h3> 
-        } 
-        return state.map((image, i) =>
-            <Image image={image} i={i}/>
-        );
+        let message = "";
+        if(isLoading === 0) {message = "Results"}
+        if(isLoading === 1) {message = "Loading..."}
+        if(isLoading === 2) {message = "No results. Consider increasing the color tolerance, or removing colors"}
+        if(isLoading === 3) {message = "Enter search query above"} 
+
+        return(
+            <div>
+                <h3 style={{color: '#eeeeee', margin: '20px'}}>{message}</h3>
+                {isLoading === 0 &&
+                    <div className="grid-container">
+                        {state.map((image, i) =>
+                            <Image image={image} i={i}/>
+                        )}
+                    </div>
+                }
+            </div>
+        )
     }
 
     function getImages(){

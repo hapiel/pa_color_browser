@@ -45,10 +45,18 @@ export default function SearchFields({setTolerance, setKeyword, setAuthor}){
 
     return(
         <div className="search-container">
-            <div className="search-element">
+            <div className="search-labels">
                 <label for="searchAll">Color tolerance: </label>
-                <label>{sliderProps.value}</label>
-                <input {...sliderProps}/>
+                <label for="searchAll">Keyword: </label>
+                <label for="author">Search author: </label>
+            </div>
+            <div className="search-inputs">
+                <div>
+                    <input {...sliderProps}/>
+                    <label>{sliderProps.value}</label>
+                </div>
+                <input type="text" id="searchAll" name="searchAll" onChange={onKeyword} value={keywordValue}/>
+                <input type="text" id="searchAll" name="searchAll" onChange={onAuthor} value={authorValue}/>
             </div>
              {/* <div className="search-element">
                 <label for="title">Search title: </label>
@@ -58,14 +66,6 @@ export default function SearchFields({setTolerance, setKeyword, setAuthor}){
                 <label for="keyword">Search keyword: </label>
                 <input type="text" id="keyword" name="keyword" />
             </div>   */}
-            <div className="search-element">
-                <label for="searchAll">Keyword: </label>
-                <input type="text" id="searchAll" name="searchAll" onChange={onKeyword} value={keywordValue}/>
-            </div>
-            <div className="search-element">
-                <label for="author">Search author: </label>
-                <input type="text" id="searchAll" name="searchAll" onChange={onAuthor} value={authorValue}/>
-            </div>
 
         </div>     
     )

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 export default function Image({image, i}){
-
     const gridCell = 128;
-    //if images are only a tiny bit too large, they will still be cropped
     const minOvershoot = 20;
     const gridGap = 10;
 

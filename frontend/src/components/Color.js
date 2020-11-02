@@ -53,7 +53,7 @@ export default function Color({setColorPalette}){
     
     return(
         <div>
-            <h2>Color</h2>
+            <h3>Color</h3>
             <div id={"palette"} className="color-search-container">
                 <ShowPallete />
                 <button className="button-large" onClick={handleClick}>+</button>
