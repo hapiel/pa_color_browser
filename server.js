@@ -20,7 +20,11 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 });
 
-app.use(express.static('./frontend/build'));
+//app.use(express.static('./frontend/build'));
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/frontend/build/index.html'))
+})
 
 const imagesRouter = require('./routes/images');
 app.use('/api', imagesRouter);
