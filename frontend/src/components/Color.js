@@ -17,7 +17,7 @@ export default function Color({setColorPalette}){
 
     function handleChange(color){
         setCurrentColor(color.hex);
-        colorArray[selectedColorIndex] = currentColor;
+        colorArray[selectedColorIndex] = color.hex;
     };
 
     function handleClose(){
