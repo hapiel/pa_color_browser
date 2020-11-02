@@ -9,6 +9,7 @@ export default function DetailView(){
     const [image, setImage] = useState();
     const [selectedColors, setSelectedColors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [copied, setCopied] = useState("");
     let { id } = useParams();
   
     useEffect(()=>{
@@ -28,7 +29,6 @@ export default function DetailView(){
         } else {
             setSelectedColors([...selectedColors, index]);
         }
-        console.log(selectedColors);
     }
     function selectAll(){
         const allIndexes = []
@@ -45,7 +45,7 @@ export default function DetailView(){
         return image.colors.map((color, i) =>
             <div key={i} id={i} className={selectedColors.includes(i) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}}>         
                 <div className="hover-visible" onClick={()=>selectColor(i)}>
-                    <CopyToClipboard text={color.hex}>
+                    <CopyToClipboard text={color.hex} onCopy={()=>copyText(color.hex)}>
                         <span className={(Math.round(color.percent)<10)? "add-space" : ""}>
                             {Math.round(color.percent)}% {color.hex} 
                         </span> 
@@ -54,7 +54,9 @@ export default function DetailView(){
             </div>
         );
     }
-
+    function copyText(hex){
+        setCopied(hex + " is copied to clipboard!")
+    }
     function Tags(){
         return(
             <p>Tags: {image.tags.map((tag, i) =>
@@ -100,13 +102,20 @@ export default function DetailView(){
                     </div>
                         
                         <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
+                        
                         <span className="select-all">
                             <a href="#" onClick={()=>selectAll()}>select all</a>, <a href="#" onClick={()=>deselectAll()}>deselect all</a>
                         </span>
+                        
                     </div>
+                    
                 </div>
                 <div className="related-art">
                     RELATED ARTWORKS GO HERE
+                </div>
+
+                <div className="alert">
+                    {copied}
                 </div>
             </div> 
         )

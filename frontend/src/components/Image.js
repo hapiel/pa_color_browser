@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 export default function Image({image, i}){
     const gridCell = 128;
@@ -19,7 +20,7 @@ export default function Image({image, i}){
 
     return(
         <div key={i} className={classes}>
-            <a href={"/detail/"+ image.pjId}>
+            <Link to={`/detail/${image.pjId}`}>
             {/* Scale small images 2x, tiny images 3x */}
             {image.width <= gridCell/2 && image.height <= gridCell/2
                 ? image.width <= gridCell/3 && image.height <= gridCell/3
@@ -27,8 +28,7 @@ export default function Image({image, i}){
                     :<span><span className="helper"></span><img src={image.url} alt={image.title} id={i} width={image.width * 2} height={image.height * 2}></img></span>
                 : <img src={image.url} alt={image.title} id={i} className="fit" width={w} height={h}></img>
             }
-            </a>
-
+            </Link>
         </div> 
     )
 }
