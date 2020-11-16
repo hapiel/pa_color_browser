@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import { ReactComponent as LaunchIcon } from '../icons/launchicon.svg';
 
-export default function Image({image, i, colorPalette}){
+export default function Image({image, i, state}){
     const gridCell = 128;
     const minOvershoot = 20;
     const gridGap = 10;
@@ -21,7 +21,7 @@ export default function Image({image, i, colorPalette}){
 
     return(
         <div key={i} className={classes}>
-            <Link to={{pathname:`/detail/${image.pjId}`, colorPalette: colorPalette}}>
+            <Link to={{pathname:`/detail/${image.pjId}`, state: state}}>
             {/* Scale small images 2x, tiny images 3x */}
             {image.width <= gridCell/2 && image.height <= gridCell/2
                 ? image.width <= gridCell/3 && image.height <= gridCell/3

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../CSS/detailView.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import { ReactComponent as GoBackIcon } from '../icons/gobackicon.svg';
@@ -10,6 +10,7 @@ export default function DetailView({...props}){
     const [image, setImage] = useState();
     const [selectedColors, setSelectedColors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation();
     const [copied, setCopied] = useState("");
     let { id } = useParams();
 
@@ -54,9 +55,11 @@ export default function DetailView({...props}){
             </div>
         );
     }
+
     function copyText(hex){
         setCopied(hex + " is copied to clipboard!")
     }
+
     function Tags(){
         return(
             <p>Tags: {image.tags.map((tag, i) =>
@@ -75,15 +78,17 @@ export default function DetailView({...props}){
         for (const [i, tag] of image.tags.entries()) {
             tagLinks.push(<a key={i} href='#'>{tag}</a>)
         }
+
         return(
             <div className="detail-view">
                 <div className ="return-bar">
                     <Link 
                         className="vertical-center"
+                        onClick={()=>location.state.colorPalette = location.state.colorPalette.concat(selectedColors)}
                         to={{
                             pathname:'/',
-                            prevPath: props.location.pathname, 
-                            colorPalette: props.location.colorPalette.concat(selectedColors)
+                            prevPath: location.pathname,
+                            state: location.state
                         }}
                         >
                         <GoBackIcon/>return
@@ -146,9 +151,7 @@ export default function DetailView({...props}){
     )
 
     function getImage(id){
-        function validator(response){
-
-        }
+        function validator(response){}
 
         function onSucces(response){
             setImage(response.data);

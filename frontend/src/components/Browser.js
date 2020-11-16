@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {useLocation} from 'react-router-dom';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
@@ -6,24 +7,23 @@ import SearchFields from './SearchFields';
 import Image from './Image';
 import '../CSS/browser.css';
 
-export default function Browser({...props}) {
-    const [state, setState] = useState([]);
-    //0 = results, 1 = loading, 2 =  no images, 3 = app start
+export default function Browser() {
+    const [data, setData] = useState([]);
+    const [state, setState] = useState({colorPalette: [], tolerance: '', keyword: '', author: ''});
     const [isLoading, setIsLoading] = useState(3);
-    const [colorPalette, setColorPalette] = useState([]);
-    const [tolerance, setTolerance] = useState();
-    const [keyword, setKeyword] = useState();
-    const [author, setAuthor] = useState();
+    const location = useLocation();
 
     useEffect(() => {
-        setColorPalette(props.location.colorPalette)
-    },[props.location.prevPath]);
+        if(location.prevPath){
+            setState(location.state);
+        }
+    },[location.prevPath]);
 
     return (
         <>
             <div className="top-bar">
-                <Color colorPalette={colorPalette} setColorPalette={setColorPalette}/>
-                <SearchFields setTolerance={setTolerance} setKeyword={setKeyword} setAuthor={setAuthor}/>
+                <Color state={state} setState={setState}/>
+                <SearchFields state={state} setState={setState}/>
                 <button id="search-button" onClick={()=>getImages()}>search</button>
             </div>
             <ShowArtworks/>  
@@ -42,8 +42,8 @@ export default function Browser({...props}) {
                 <h3 style={{color: '#eeeeee', margin: '20px'}}>{message}</h3>
                 {isLoading === 0 &&
                     <div className="grid-container">
-                        {state.map((image, i) =>
-                            <Image image={image} i={i} colorPalette={colorPalette}/>
+                        {data.map((image, i) =>
+                            <Image image={image} i={i} state={state} setState={setState}/>
                         )}
                     </div>
                 }
@@ -56,7 +56,7 @@ export default function Browser({...props}) {
 
         function onSucces(response){
             if (response.data.length > 0){
-                setState(response.data);
+                setData(response.data);
                 setIsLoading(0);
             } else {
                 setIsLoading(2);
@@ -68,6 +68,6 @@ export default function Browser({...props}) {
         }
 
         setIsLoading(1);
-        Api.get('/api', validator, onSucces, onFailure, {headers:{'colorarray': colorPalette, 'tolerance': tolerance, 'keyword': keyword, 'author': author}})
+        Api.get('/api', validator, onSucces, onFailure, {headers:{'colorarray': state.colorPalette, 'tolerance': state.tolerance, 'keyword': state.keyword, 'author': state.author}})
     }
 }

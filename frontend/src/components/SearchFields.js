@@ -18,7 +18,7 @@ const useSlider = (min, max, defaultState, label, id) => {
     return props
 }
 
-export default function SearchFields({setTolerance, setKeyword, setAuthor}){
+export default function SearchFields({state, setState}){
     const [keywordValue, setKeywordValue] = useState("");
     const [authorValue, setAuthorValue] = useState("");
     const sliderProps = useSlider(0, 20, 4, "Threshold", 'threshold');
@@ -32,15 +32,15 @@ export default function SearchFields({setTolerance, setKeyword, setAuthor}){
     };
 
     useEffect(()=>{
-        setTolerance(sliderProps.value);
+        setState(state => ({...state, tolerance: sliderProps.value}));
     },[sliderProps.value])
 
     useEffect(()=>{
-        setKeyword(keywordValue);
+        setState(state => ({...state, keyword: keywordValue}));
     },[keywordValue])
 
     useEffect(()=>{
-        setAuthor(authorValue);
+        setState(state => ({...state, author: authorValue}));
     },[authorValue])
 
     return(
