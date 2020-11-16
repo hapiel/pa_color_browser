@@ -46,9 +46,9 @@ export default function SearchFields({setTolerance, setKeyword, setAuthor}){
     return(
         <div className="search-container">
             <div className="search-labels">
-                <label for="searchAll">Color tolerance: </label>
-                <label for="searchAll">Keyword: </label>
-                <label for="author">Search author: </label>
+                <label htmlFor="searchAll">Color tolerance: </label>
+                <label htmlFor="searchAll">Keyword: </label>
+                <label htmlFor="author">Search author: </label>
             </div>
             <div className="search-inputs">
                 <div>
@@ -58,7 +58,7 @@ export default function SearchFields({setTolerance, setKeyword, setAuthor}){
                 <input type="text" id="searchAll" name="searchAll" onChange={onKeyword} value={keywordValue}/>
                 <input type="text" id="searchAll" name="searchAll" onChange={onAuthor} value={authorValue}/>
             </div>
-             {/* <div className="search-element">
+            {/* <div className="search-element">
                 <label for="title">Search title: </label>
                 <input type="text" id="title" name="title" />
             </div>

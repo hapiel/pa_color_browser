@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import '../CSS/detailView.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
+import { ReactComponent as GoBackIcon } from '../icons/gobackicon.svg';
 
-export default function DetailView(){
+export default function DetailView({...props}){
     const [image, setImage] = useState();
     const [selectedColors, setSelectedColors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [copied, setCopied] = useState("");
     let { id } = useParams();
-  
+
     useEffect(()=>{
         getImage(id)
     },[id])
@@ -22,20 +23,19 @@ export default function DetailView(){
         } 
         return <Details/>
     }
-  
-    function selectColor(index){
-        if (selectedColors.includes(index)) {
-            setSelectedColors(selectedColors.filter(function(e) { return e !== index; }))
+    function selectColor(color){
+        if (selectedColors.includes(color)) {
+            setSelectedColors(selectedColors.filter(function(e) { return e !== color; }))
         } else {
-            setSelectedColors([...selectedColors, index]);
+            setSelectedColors([...selectedColors, color]);
         }
     }
     function selectAll(){
-        const allIndexes = []
+        const allColors = []
         for (let i = 0; i < image.colors.length; i++) {
-            allIndexes.push(i);
+            allColors.push(image.colors[i]);
         }
-        setSelectedColors(allIndexes);
+        setSelectedColors(allColors);
     }
     function deselectAll(){
         setSelectedColors([]);
@@ -43,8 +43,8 @@ export default function DetailView(){
 
     function Palette(){
         return image.colors.map((color, i) =>
-            <div key={i} id={i} className={selectedColors.includes(i) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}}>         
-                <div className="hover-visible" onClick={()=>selectColor(i)}>
+            <div key={i} id={i} className={selectedColors.includes(color.hex) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}}>         
+                <div className="hover-visible" onClick={()=>selectColor(color.hex)}>
                     <CopyToClipboard text={color.hex} onCopy={()=>copyText(color.hex)}>
                         <span className={(Math.round(color.percent)<10)? "add-space" : ""}>
                             {Math.round(color.percent)}% {color.hex} 
@@ -78,7 +78,16 @@ export default function DetailView(){
         return(
             <div className="detail-view">
                 <div className ="return-bar">
-                    <a href="../">return to search</a>
+                    <Link 
+                        className="vertical-center"
+                        to={{
+                            pathname:'/',
+                            prevPath: props.location.pathname, 
+                            colorPalette: props.location.colorPalette.concat(selectedColors)
+                        }}
+                        >
+                        <GoBackIcon/>return
+                    </Link>
                 </div>
                 <div className="detail-container">
                     <div className="image-large">
@@ -100,15 +109,12 @@ export default function DetailView(){
                     <div className="color-wrapper">
                         <Palette/>
                     </div>
-                        
                         <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
                         
                         <span className="select-all">
                             <a href="#" onClick={()=>selectAll()}>select all</a>, <a href="#" onClick={()=>deselectAll()}>deselect all</a>
                         </span>
-                        
                     </div>
-                    
                 </div>
                 <div className="related-art">
                     RELATED ARTWORKS GO HERE

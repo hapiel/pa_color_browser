@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
@@ -6,24 +6,26 @@ import SearchFields from './SearchFields';
 import Image from './Image';
 import '../CSS/browser.css';
 
-export default function Browser() {
+export default function Browser({...props}) {
     const [state, setState] = useState([]);
     //0 = results, 1 = loading, 2 =  no images, 3 = app start
     const [isLoading, setIsLoading] = useState(3);
-    const [colorPalette, setColorPalette] = useState();
+    const [colorPalette, setColorPalette] = useState([]);
     const [tolerance, setTolerance] = useState();
     const [keyword, setKeyword] = useState();
     const [author, setAuthor] = useState();
 
+    useEffect(() => {
+        setColorPalette(props.location.colorPalette)
+    },[props.location.prevPath]);
+
     return (
         <>
             <div className="top-bar">
-                
-                <Color setColorPalette={setColorPalette}/>
+                <Color colorPalette={colorPalette} setColorPalette={setColorPalette}/>
                 <SearchFields setTolerance={setTolerance} setKeyword={setKeyword} setAuthor={setAuthor}/>
                 <button id="search-button" onClick={()=>getImages()}>search</button>
             </div>
-            
             <ShowArtworks/>  
         </>
     )
@@ -41,7 +43,7 @@ export default function Browser() {
                 {isLoading === 0 &&
                     <div className="grid-container">
                         {state.map((image, i) =>
-                            <Image image={image} i={i}/>
+                            <Image image={image} i={i} colorPalette={colorPalette}/>
                         )}
                     </div>
                 }
@@ -53,7 +55,6 @@ export default function Browser() {
         function validator(response){}
 
         function onSucces(response){
-            console.log(response.data);
             if (response.data.length > 0){
                 setState(response.data);
                 setIsLoading(0);

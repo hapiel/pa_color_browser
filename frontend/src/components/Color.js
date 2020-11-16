@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import '../CSS/color.css';
 
-export default function Color({setColorPalette}){
+export default function Color({colorPalette, setColorPalette}){
     const [showPicker, setShowPicker] = useState(false);
     const [currentColor, setCurrentColor] = useState();
     const [colorArray, setColorArray] = useState([]);
-    const [selectedColorIndex, setSelectedColorIndex] = useState();    
+    const [selectedColorIndex, setSelectedColorIndex] = useState();
+    
+    useEffect(()=>{
+        if(colorPalette !== undefined){
+            return setColorArray(colorPalette);
+        }
+    }, [colorPalette])
 
     function handleClick(){
         setColorArray([...colorArray, '#FFFFFF'])
