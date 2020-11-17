@@ -33,21 +33,21 @@ export default function SearchFields({state, setState}){
 
     useEffect(()=>{
         setState(state => ({...state, tolerance: sliderProps.value}));
-    },[sliderProps.value])
+    },[setState, sliderProps.value])
 
     useEffect(()=>{
         setState(state => ({...state, keyword: keywordValue}));
-    },[keywordValue])
+    },[setState, keywordValue])
 
     useEffect(()=>{
         setState(state => ({...state, author: authorValue}));
-    },[authorValue])
+    },[setState, authorValue])
 
     return(
         <div className="search-container">
             <div className="search-labels">
-                <label htmlFor="searchAll">Color tolerance: </label>
-                <label htmlFor="searchAll">Keyword: </label>
+                <label htmlFor="tolerance">Color tolerance: </label>
+                <label htmlFor="keyword">Keyword: </label>
                 <label htmlFor="author">Search author: </label>
             </div>
             <div className="search-inputs">
@@ -55,8 +55,8 @@ export default function SearchFields({state, setState}){
                     <input {...sliderProps}/>
                     <label>{sliderProps.value}</label>
                 </div>
-                <input type="text" id="searchAll" name="searchAll" onChange={onKeyword} value={keywordValue}/>
-                <input type="text" id="searchAll" name="searchAll" onChange={onAuthor} value={authorValue}/>
+                <input type="text" id="keyword" name="keyword" onChange={onKeyword} value={keywordValue}/>
+                <input type="text" id="author" name="author" onChange={onAuthor} value={authorValue}/>
             </div>
             {/* <div className="search-element">
                 <label for="title">Search title: </label>

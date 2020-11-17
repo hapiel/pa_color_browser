@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Browser from '../components/Browser';
 import DetailView from '../components/DetailView';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
+  const [state, setState] = useState({colorPalette: [], tolerance: '', keyword: '', author: ''});
+
   return (
     <Router>
       <Switch>
-        <Route path="/" exact component={Browser}/>
-        <Route path="/detail/:id" exact component={DetailView}/>
+        <Route path="/" exact>
+          <Browser state={state} setState={setState}/>
+        </Route>
+        <Route path="/detail/:id" exact>
+          <DetailView state={state} setState={setState}/>
+        </Route>
       </Switch>
     </Router>
   );

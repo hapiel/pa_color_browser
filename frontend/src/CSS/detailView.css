@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
 
+.vertical-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .add-space:before{
   content: "\00a0 ";
 }
@@ -10,6 +16,10 @@ a {
 
 a:hover {
   color: black;
+}
+
+h2 {
+  margin-top: 0;
 }
 
 .color-wrapper{
@@ -46,6 +56,7 @@ a:hover {
 
 .detail-view{
   background-color: rgb(139, 139, 139);
+  width:100%;
 }
 
 .detail-container{
@@ -62,15 +73,54 @@ a:hover {
 }
 
 .image-metadata{
-  flex-basis: 50%;
+  flex-basis: 47%;
   flex-grow: 1;
   max-width: 70%;
+  margin-right: 3%;
+  position: relative;
 }
 
-.return-bar{
-  padding: 0.8em 1.2em;
-  font-weight: bold;
+.palette-bar-item{
+  height: 2em;
+  display: inline-block;
 }
+
+
+.detail-top-bar a{
+  text-decoration: none;
+}
+
+.pj-bar svg{
+  position: relative;
+  top: 2px;
+}
+
+.return-bar svg{
+  position: relative;
+  top: 1px;
+}
+
+
+.detail-top-bar{
+  font-weight: bold;
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.return-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+}
+
+
+.return-sub{
+  display:inline-flex;
+}
+
 
 .select-all{
   float: right;

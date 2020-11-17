@@ -6,11 +6,6 @@ html, body, :root {
   background-color: #3A3A3C;
 }
 
-.vertical-center{
-  display: inline-flex;
-  align-items: center;
-}
-
 #search-button{
   background-color: #dddddd;
   border: 5px solid #333333;
@@ -46,7 +41,7 @@ img {
 
 .art-grid{
   background-color: #464646;
-  text-align: left;
+  text-align: center;
   position: relative;
   display: inline;
   height:100%;

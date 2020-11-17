@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import {useLocation} from 'react-router-dom';
+import React, { useState } from 'react';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
@@ -7,17 +6,9 @@ import SearchFields from './SearchFields';
 import Image from './Image';
 import '../CSS/browser.css';
 
-export default function Browser() {
+export default function Browser({state, setState}) {
     const [data, setData] = useState([]);
-    const [state, setState] = useState({colorPalette: [], tolerance: '', keyword: '', author: ''});
     const [isLoading, setIsLoading] = useState(3);
-    const location = useLocation();
-
-    useEffect(() => {
-        if(location.prevPath){
-            setState(location.state);
-        }
-    },[location.prevPath]);
 
     return (
         <>
@@ -43,7 +34,7 @@ export default function Browser() {
                 {isLoading === 0 &&
                     <div className="grid-container">
                         {data.map((image, i) =>
-                            <Image image={image} i={i} state={state} setState={setState}/>
+                            <Image image={image} key={i} state={state} setState={setState}/>
                         )}
                     </div>
                 }

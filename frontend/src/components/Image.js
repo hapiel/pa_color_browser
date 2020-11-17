@@ -5,7 +5,7 @@ import { ReactComponent as LaunchIcon } from '../icons/launchicon.svg';
 export default function Image({image, i, state}){
     const gridCell = 128;
     const minOvershoot = 20;
-    const gridGap = 10;
+    const gridGap = 8;
 
     let classes="art-grid";
     let w = gridCell
@@ -21,7 +21,7 @@ export default function Image({image, i, state}){
 
     return(
         <div key={i} className={classes}>
-            <Link to={{pathname:`/detail/${image.pjId}`, state: state}}>
+            <Link to={{pathname:`/detail/${image.pjId}`}}>
             {/* Scale small images 2x, tiny images 3x */}
             {image.width <= gridCell/2 && image.height <= gridCell/2
                 ? image.width <= gridCell/3 && image.height <= gridCell/3
