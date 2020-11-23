@@ -20,32 +20,42 @@ function hexToRgb(hex){
 
 // search by color
 router.route('/').get((req, res) => {
-  let colorsString = req.headers.colorarray;
-  let colorArray = colorsString.split(',');
-  let tolerance = parseInt(req.headers.tolerance);
-  let keyword = new RegExp(req.headers.keyword, 'i');
-  let author = new RegExp(req.headers.author, 'i');
+  let colorString = req.headers.colorarray;
+  let keyword = req.headers.keyword;
+  let author = req.headers.author;
   let query = {'$and': []};
-  const minPercent = 0.1;
   let page = 1;
 
-  query['$and'].push({title: {$regex: keyword}})
-  query['$and'].push({author: {$regex: author}})
-  
-  for (const color in colorArray) {
-    let rgb = hexToRgb(colorArray[color]);
-      query['$and'].push(
-        { colors: { $elemMatch: { "$and": [ 
-          {"rgb.0": {$gte: rgb[0]-tolerance, $lte: rgb[0]+tolerance}}, 
-          {"rgb.1": {$gte: rgb[1]-tolerance, $lte: rgb[1]+tolerance}}, 
-          {"rgb.2": {$gte: rgb[2]-tolerance, $lte: rgb[2]+tolerance}}, 
-          {percent: {$gte: minPercent}},
-        ]}}},
-      );
+  if(keyword){
+    keyword = new RegExp(req.headers.keyword, 'i');
+    query['$and'].push({title: {$regex: keyword}});
+  }
+  if(author){
+    author = new RegExp(req.headers.author, 'i');
+    query['$and'].push({author: {$regex: author}});
+  }
+  if(colorString){
+    let colorArray = colorString.split(',');
+    let tolerance = parseInt(req.headers.tolerance);
+    const minPercent = 0.1;
+
+    for (const color in colorArray) {
+      let rgb = hexToRgb(colorArray[color]);
+        query['$and'].push(
+          { colors: { $elemMatch: { "$and": [ 
+            {"rgb.0": {$gte: rgb[0]-tolerance, $lte: rgb[0]+tolerance}}, 
+            {"rgb.1": {$gte: rgb[1]-tolerance, $lte: rgb[1]+tolerance}}, 
+            {"rgb.2": {$gte: rgb[2]-tolerance, $lte: rgb[2]+tolerance}}, 
+            {percent: {$gte: minPercent}},
+          ]}}},
+        );
+    }
   }
 
-  Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
-  .catch(err => res.status(400).json('Error: ' + err));
+  if(query['$and'].length){
+    Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
+    .catch(err => res.status(400).json('Error: ' + err));
+  }  
 });
 
 router.route('/:id').get((req, res) => {
