@@ -1,21 +1,37 @@
 import React, { useState } from 'react';
+import { useForm } from "react-hook-form";
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
 import SearchFields from './SearchFields';
 import Image from './Image';
+import FormField from './FormField';
 import '../CSS/browser.css';
 
 export default function Browser({state, setState}) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(3);
+    const { register, handleSubmit } = useForm();
+    const onSubmit = formData => console.log(formData);
+
+    const [activeFilters, setActiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ]);
+    const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
 
     return (
         <>
             <div className="top-bar">
                 <Color state={state} setState={setState}/>
-                <SearchFields state={state} setState={setState}/>
-                <button id="search-button" onClick={()=>getImages()}>search</button>
+                
+                <form onSubmit={handleSubmit(onSubmit)}>
+
+                    <button>Add Filter +</button>
+
+                    {activeFilters.map((filter, index)=>{
+                        return <div><FormField filter={filter} register={register} inactive={inactiveFilters}/><button>X</button></div>
+                    })}
+                    
+                    <input id="search-button" type="submit" />
+                </form>
             </div>
             <ShowArtworks/>  
         </>

@@ -19,7 +19,7 @@ const useSlider = (min, max, defaultState, label, id) => {
 }
 
 export default function SearchFields({state, setState}){
-    const [activeFilters, setActiveFilters] = useState([]);
+    const [activeFilters, setActiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ]);
     const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
 
     const [keywordValue, setKeywordValue] = useState("");
@@ -74,6 +74,11 @@ export default function SearchFields({state, setState}){
         });
     }
     
+    function EmptyFilter(){
+        return <div className="filter-block">
+            DROPDOWN MENU which filter? 
+        </div>
+    }
     
 
     return(
