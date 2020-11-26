@@ -9,6 +9,7 @@ import FormField from './FormField';
 import '../CSS/browser.css';
 
 export default function Browser({state, setState}) {
+    let newfilter = true;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(3);
     const { register, handleSubmit } = useForm({defaultValues: state.filters});
@@ -23,7 +24,7 @@ export default function Browser({state, setState}) {
         }
     }, [state])
 
-    const [activeFilters, setActiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ]);
+    const [activeFilters, setActiveFilters] = useState([ ]);
     const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
 
     return (
@@ -32,8 +33,17 @@ export default function Browser({state, setState}) {
                 <Color state={state} setState={setState}/>
                 
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <div>
+                        Add filter:   
+                        <select id="filter-dropdown" name="newFilter" onChange={(e) => {filterDropdown(e.target.value)}} >
+                                <option value="empty">+</option>
+                            {inactiveFilters.map((filter, i) =>
+                                        <option value={filter}>{filter}</option>
+                                    )}
+                        </select>
+                            
+                    </div>
 
-                    <div><button>Add Filter +</button></div>
 
                     {activeFilters.map((filter, index)=>{
                         return <div className="filter-box"><FormField filter={filter} register={register} inactive={inactiveFilters}/> <button>X</button></div>
@@ -45,6 +55,19 @@ export default function Browser({state, setState}) {
             <ShowArtworks/>  
         </>
     )
+    
+    function filterDropdown(filter){
+        if (filter !== "") {
+            for( var i = 0; i < inactiveFilters.length; i++){ 
+            
+                if ( inactiveFilters[i] === filter) { 
+                    setInactiveFilters(inactiveFilters.filter(item => item.filter !== filter));
+                }
+            }
+            setActiveFilters([...activeFilters, filter]);
+            document.getElementById("filter-dropdown").value = "empty";
+        }
+    }
 
     function ShowArtworks() {
         let message = "";
@@ -66,6 +89,7 @@ export default function Browser({state, setState}) {
             </div>
         )
     }
+
 
     function getImages(){
         function validator(response){}
