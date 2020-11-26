@@ -4,7 +4,7 @@ import DetailView from '../components/DetailView';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
-  const [state, setState] = useState({colorPalette: [], tolerance: '', keyword: '', author: ''});
+  const [state, setState] = useState({colorPalette: [], filters: {}});
 
   return (
     <Router>

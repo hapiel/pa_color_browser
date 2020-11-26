@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
@@ -11,8 +11,17 @@ import '../CSS/browser.css';
 export default function Browser({state, setState}) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(3);
-    const { register, handleSubmit } = useForm();
-    const onSubmit = formData => console.log(formData);
+    const { register, handleSubmit } = useForm({defaultValues: state.filters});
+    const onSubmit = filters => {
+        setIsLoading(1);
+        setState(state => ({...state, filters}));
+    };
+
+    useEffect(() => {
+        if(isLoading===1){
+            getImages();
+        }
+    }, [state])
 
     const [activeFilters, setActiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ]);
     const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
@@ -24,10 +33,10 @@ export default function Browser({state, setState}) {
                 
                 <form onSubmit={handleSubmit(onSubmit)}>
 
-                    <button>Add Filter +</button>
+                    <div><button>Add Filter +</button></div>
 
                     {activeFilters.map((filter, index)=>{
-                        return <div><FormField filter={filter} register={register} inactive={inactiveFilters}/><button>X</button></div>
+                        return <div className="filter-box"><FormField filter={filter} register={register} inactive={inactiveFilters}/> <button>X</button></div>
                     })}
                     
                     <input id="search-button" type="submit" />
@@ -75,6 +84,12 @@ export default function Browser({state, setState}) {
         }
 
         setIsLoading(1);
-        Api.get('/api', validator, onSucces, onFailure, {headers:{'colorarray': state.colorPalette, 'tolerance': state.tolerance, 'keyword': state.keyword, 'author': state.author}})
+        Api.get('/api', validator, onSucces, onFailure, {
+            headers:{
+                'colorarray': state.colorPalette,
+                'keyword': state.filters.keyword, 
+                'author': state.filters.author
+            }
+        })
     }
 }

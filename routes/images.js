@@ -36,7 +36,7 @@ router.route('/').get((req, res) => {
   }
   if(colorString){
     let colorArray = colorString.split(',');
-    let tolerance = parseInt(req.headers.tolerance);
+    let tolerance = 20;
     const minPercent = 0.1;
 
     for (const color in colorArray) {
