@@ -12,6 +12,7 @@ export default function DetailView({state, setState}){
     const [selectedColors, setSelectedColors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [copied, setCopied] = useState("");
+    const [swatch, setSwatch] = useState({});
     let { id } = useParams();
 
     useEffect(()=>{
@@ -25,12 +26,13 @@ export default function DetailView({state, setState}){
         return <Details/>
     }
 
-    function selectColor(color){
+    function selectColor(color, colorObj){
         if (selectedColors.includes(color)) {
             setSelectedColors(selectedColors.filter(function(e) { return e !== color; }))
         } else {
             setSelectedColors([...selectedColors, color]);
         }
+        setSwatch(colorObj);
     }
 
     function selectAll(){
@@ -50,13 +52,11 @@ export default function DetailView({state, setState}){
             .sort((a, b) => a.dbBrightness > b.dbBrightness ? 1 : -1);
 
         return sortedData.map((color, i) =>
-            <div key={i} id={i} className={selectedColors.includes(color.hex) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}}>         
-                <div className="hover-visible" onClick={()=>selectColor(color.hex)}>
-                    <CopyToClipboard text={color.hex} onCopy={()=>copyText(color.hex)}>
-                        <span className={(Math.round(color.percent)<10)? "add-space" : ""}>
-                            {Math.round(color.percent)}% {color.hex} 
-                        </span> 
-                    </CopyToClipboard>
+            <div key={i} id={i} className={selectedColors.includes(color.hex) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}} onClick={()=>selectColor(color.hex, color)}>
+                <div className="hover-visible" >
+                    {/* <CopyToClipboard text={color.hex} onCopy={()=>copyText(color.hex)}>
+
+                    </CopyToClipboard> */}
                 </div>
             </div>
         );
@@ -64,10 +64,21 @@ export default function DetailView({state, setState}){
 
     function PaletteBar(){
         return image.colors.map((color, i) =>
-            <div key={i} id={i} className="palette-bar-item" style={{backgroundColor: color.hex, width: (color.percent) + "%"}}>         
+            <div key={i} id={i} className="palette-bar-item" style={{backgroundColor: color.hex, width: (color.percent) + "%"} } onClick={()=>selectColor(color.hex, color)}>         
 
             </div>
         );
+    }
+
+    function ColorSwatch(){
+        return <div className="color-swatch">
+            <div className="color-example" style={{backgroundColor: swatch.hex}}></div>
+            <p>HEX: {swatch.hex}</p>
+            <p>R: {swatch.rgb[0]} G: {swatch.rgb[1]} B: {swatch.rgb[2]}</p>
+            <p>Percentage used: {swatch.percent}</p>
+            
+            
+        </div>
     }
 
     function updatePalette(){
@@ -120,13 +131,15 @@ export default function DetailView({state, setState}){
                 </div>
                 <div className="detail-container">
                     <div className="image-large">
-                    <img src={image.url} alt={image.title} id={image.pjId} ></img>
+                    
                     <div className="zoom-detail">
+                        zoom<br/>
                         <button type="button" onClick={()=>zoomOut(image.pjId)}>-</button>
                         <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
-                        <br/>
-                        zoom
+                        
+                        
                     </div>
+                    <img src={image.url} alt={image.title} id={image.pjId} ></img>
                     </div>
                     <div className="image-metadata">
                     <div className="meta-text">
@@ -135,13 +148,19 @@ export default function DetailView({state, setState}){
                         <h3>Created by <span>{image.author}</span></h3>
                         <p>{image.desc}</p>
                         <Tags/>
-                        <p>Number of colors: {image.trans? image.colorCount + 1: image.colorCount}</p>
+                        <p>Number of colors: {image.trans? image.colorCount + 1: image.colorCount} <br></br>
+                        {image.trans? "(" + String(image.colorCount) + " + transparency)" : <></>}
+                        </p>
+                        <p>Dimensions: {image.width} x {image.height}px</p>
                     </div>
                     <div className="palette-bar">
                         <PaletteBar/>
                     </div>
-                    <div className="color-wrapper">
-                        <Palette/>
+                    <div className="color-flex">
+                        <div className="color-wrapper">
+                            <Palette/>
+                        </div>
+                        <ColorSwatch/>
                     </div>
                         <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
                         <span className="select-all">

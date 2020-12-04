@@ -3,17 +3,21 @@ import { useForm } from "react-hook-form";
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
-import SearchFields from './SearchFields';
 import Image from './Image';
 import FormField from './FormField';
 import '../CSS/browser.css';
+import ColorPalette from './ColorPicker';
 
 export default function Browser({state, setState}) {
     let newfilter = true;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(3);
     const { register, handleSubmit } = useForm({defaultValues: state.filters});
+    const [activeFilters, setActiveFilters] = useState([]);
+    const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
+
     const onSubmit = filters => {
+        console.log(filters)
         setIsLoading(1);
         setState(state => ({...state, filters}));
     };
@@ -24,32 +28,35 @@ export default function Browser({state, setState}) {
         }
     }, [state])
 
-    const [activeFilters, setActiveFilters] = useState([ ]);
-    const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
+    useEffect(()=>{
+        console.log(activeFilters)
+    }, [activeFilters])
 
     return (
         <>
             <div className="top-bar">
-                <Color state={state} setState={setState}/>
+                <ColorPalette state={state} setState={setState}/>
                 
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div>
+                <form>
+                    <p>
                         Add filter:   
                         <select id="filter-dropdown" name="newFilter" onChange={(e) => {filterDropdown(e.target.value)}} >
                                 <option value="empty">+</option>
                             {inactiveFilters.map((filter, i) =>
-                                        <option value={filter}>{filter}</option>
+                                        activeFilters.includes(filter)?<></>:<option value={filter}>{filter}</option>
+                                        
                                     )}
-                        </select>
-                            
+                        </select>          
+                    </p>
+
+                    <div>
+                        {activeFilters.map((filter, index)=>
+                            <div className="filter-box">
+                                <FormField filter={filter} register={register}/> 
+                            <button onClick={() => closeFilter(filter)} type="button" >X</button></div>
+                        )}
                     </div>
-
-
-                    {activeFilters.map((filter, index)=>{
-                        return <div className="filter-box"><FormField filter={filter} register={register} inactive={inactiveFilters}/> <button>X</button></div>
-                    })}
-                    
-                    <input id="search-button" type="submit" />
+                    <button type="submit" onClick={handleSubmit(onSubmit)}>Submit</button>
                 </form>
             </div>
             <ShowArtworks/>  
@@ -58,15 +65,15 @@ export default function Browser({state, setState}) {
     
     function filterDropdown(filter){
         if (filter !== "") {
-            for( var i = 0; i < inactiveFilters.length; i++){ 
-            
-                if ( inactiveFilters[i] === filter) { 
-                    setInactiveFilters(inactiveFilters.filter(item => item.filter !== filter));
-                }
-            }
+            // setInactiveFilters(inactiveFilters.filter(item => item !== filter));
             setActiveFilters([...activeFilters, filter]);
             document.getElementById("filter-dropdown").value = "empty";
         }
+    }
+
+    function closeFilter(filter){
+        setActiveFilters(activeFilters.filter(item => item !== filter));       
+        // setInactiveFilters(inactiveFilters.concat(filter));
     }
 
     function ShowArtworks() {

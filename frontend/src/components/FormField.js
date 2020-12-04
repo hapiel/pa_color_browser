@@ -52,13 +52,13 @@ export default function FormField({register, filter}){
         case "Animation":
             return (
                 <>
-                Animation:<span className="onoff"> <input type="checkbox" name='animation' id="animation" className="onoff" ref={register}></input><label for="animation"></label></span>
+                Animation:<span className="onoff"> <input type="checkbox" name='animation' id="animation"  ref={register}></input><label htmlFor="animation"></label></span>
                 </>    
             )
         case "Transparency":
             return (
                 <>
-                Transparency: <span className="onoff"> <input type="checkbox" name='transparency' id="transparency" ref={register}></input><label for="transparency"></label> </span>
+                Transparency: <span className="onoff"> <input type="checkbox" name='transparency' id="transparency" ref={register}></input><label htmlFor="transparency"></label> </span>
                 </>    
             )
         default:
