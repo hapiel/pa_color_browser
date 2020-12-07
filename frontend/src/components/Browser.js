@@ -5,7 +5,7 @@ import ValidationError from '../util/ValidationError';
 import Color from './Color';
 import Image from './Image';
 import FormField from './FormField';
-import '../CSS/browser.css';
+import '../CSS/browser.scss';
 import ColorPalette from './ColorPicker';
 
 export default function Browser({state, setState}) {
@@ -17,7 +17,6 @@ export default function Browser({state, setState}) {
     const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
 
     const onSubmit = filters => {
-        console.log(filters)
         setIsLoading(1);
         setState(state => ({...state, filters}));
     };
@@ -27,10 +26,6 @@ export default function Browser({state, setState}) {
             getImages();
         }
     }, [state])
-
-    useEffect(()=>{
-        console.log(activeFilters)
-    }, [activeFilters])
 
     return (
         <>
@@ -103,6 +98,7 @@ export default function Browser({state, setState}) {
 
         function onSucces(response){
             if (response.data.length > 0){
+                console.log(response);
                 setData(response.data);
                 setIsLoading(0);
             } else {

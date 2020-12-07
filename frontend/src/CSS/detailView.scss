@@ -82,14 +82,17 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  flex-direction: row;
 }
 
 .image-large{
   flex-basis: 50%;
   flex-grow: 1;
   text-align: center;
-  align-self: center;
+  align-self: stretch ;
 }
+
+
 
 .image-metadata{
   flex-basis: 47%;
@@ -146,13 +149,6 @@ h2 {
   text-align: right;
 }
 
-
-
-.alert{
-  position: fixed;
-  left: 50%;
-  bottom: 20px;
-  transform: translate(-50%, -50%);
-  margin: 0 auto;
-  color: whitesmoke;
+.zoom-detail{
+  
 }

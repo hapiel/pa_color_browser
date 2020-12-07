@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../CSS/detailView.css';
+import '../CSS/detailView.scss';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { useParams, Link } from 'react-router-dom';
 import Api from '../util/Api';
@@ -11,8 +11,9 @@ export default function DetailView({state, setState}){
     const [image, setImage] = useState();
     const [selectedColors, setSelectedColors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [copied, setCopied] = useState("");
+    const [copied, setCopied] = useState();
     const [swatch, setSwatch] = useState({});
+    const [zoomWidth, setZoomWidth] = useState();
     let { id } = useParams();
 
     useEffect(()=>{
@@ -33,6 +34,14 @@ export default function DetailView({state, setState}){
             setSelectedColors([...selectedColors, color]);
         }
         setSwatch(colorObj);
+        setCopied("");
+    }
+
+    function mouseSwatch(colorObj){
+        if (selectedColors.length === 0){
+            setSwatch(colorObj);
+            setCopied("");
+        }
     }
 
     function selectAll(){
@@ -52,11 +61,8 @@ export default function DetailView({state, setState}){
             .sort((a, b) => a.dbBrightness > b.dbBrightness ? 1 : -1);
 
         return sortedData.map((color, i) =>
-            <div key={i} id={i} className={selectedColors.includes(color.hex) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}} onClick={()=>selectColor(color.hex, color)}>
+            <div key={i} id={i} className={selectedColors.includes(color.hex) ? "color-tile select" : "color-tile deselect"} style={{backgroundColor: color.hex}} onClick={()=>selectColor(color.hex, color)} onMouseEnter={()=>mouseSwatch(color)}>
                 <div className="hover-visible" >
-                    {/* <CopyToClipboard text={color.hex} onCopy={()=>copyText(color.hex)}>
-
-                    </CopyToClipboard> */}
                 </div>
             </div>
         );
@@ -64,19 +70,19 @@ export default function DetailView({state, setState}){
 
     function PaletteBar(){
         return image.colors.map((color, i) =>
-            <div key={i} id={i} className="palette-bar-item" style={{backgroundColor: color.hex, width: (color.percent) + "%"} } onClick={()=>selectColor(color.hex, color)}>         
-
+            <div key={i} id={i} className="palette-bar-item" style={{backgroundColor: color.hex, width: (color.percent) + "%"} } onClick={()=>selectColor(color.hex, color)} onMouseEnter={()=>mouseSwatch(color)}>
             </div>
         );
     }
 
     function ColorSwatch(){
         return <div className="color-swatch">
-            <div className="color-example" style={{backgroundColor: swatch.hex}}></div>
-            <p>HEX: {swatch.hex}</p>
+            <div className="color-example" style={{backgroundColor: swatch.hex}}></div>            
+            <CopyToClipboard text={swatch.hex.toUpperCase()} onCopy={()=>copyText(swatch.hex.toUpperCase())}>
+                <p>HEX: {swatch.hex.toUpperCase()} {copied}</p>
+            </CopyToClipboard>  
             <p>R: {swatch.rgb[0]} G: {swatch.rgb[1]} B: {swatch.rgb[2]}</p>
-            <p>Percentage used: {swatch.percent}</p>
-            
+            <p>Percentage used: {Math.round(swatch.percent * 100) / 100 }%</p>
             
         </div>
     }
@@ -88,7 +94,7 @@ export default function DetailView({state, setState}){
     }
 
     function copyText(hex){
-        setCopied(hex + " is copied to clipboard!")
+        setCopied(" copied!")
     }
 
     function Tags(){
@@ -130,8 +136,8 @@ export default function DetailView({state, setState}){
                     </div>
                 </div>
                 <div className="detail-container">
+            
                     <div className="image-large">
-                    
                     <div className="zoom-detail">
                         zoom<br/>
                         <button type="button" onClick={()=>zoomOut(image.pjId)}>-</button>
@@ -139,7 +145,8 @@ export default function DetailView({state, setState}){
                         
                         
                     </div>
-                    <img src={image.url} alt={image.title} id={image.pjId} ></img>
+                    
+                    <img src={image.url} alt={image.title} id={image.pjId} width={zoomWidth} ></img>
                     </div>
                     <div className="image-metadata">
                     <div className="meta-text">
@@ -160,7 +167,8 @@ export default function DetailView({state, setState}){
                         <div className="color-wrapper">
                             <Palette/>
                         </div>
-                        <ColorSwatch/>
+                        {Object.keys(swatch).length !== 0  ?<ColorSwatch/>: <></>}
+                        
                     </div>
                         <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
                         <span className="select-all">
@@ -174,11 +182,7 @@ export default function DetailView({state, setState}){
                     </div>
                 </div>
                 <div className="related-art">
-                    RELATED ARTWORKS GO HERE
-                </div>
-
-                <div className="alert">
-                    {copied}
+                    RELATED ARTWORKS GO HEREE
                 </div>
             </div> 
         )
@@ -187,14 +191,16 @@ export default function DetailView({state, setState}){
     function zoomIn(id) {
         var img = document.getElementById(id);
         var width = img.clientWidth;
-        img.style.width = (width * 2) + "px";
+        setZoomWidth((width * 2) + "px");
+        // img.style.width = (width * 2) + "px";
     }
 
     function zoomOut(id) {
         var img = document.getElementById(id);
         var width = img.clientWidth;
         if (width === img.naturalWidth) return false;
-        img.style.width = (width / 2) + "px";
+        setZoomWidth((width / 2) + "px");
+        // img.style.width = (width / 2) + "px";
     }
 
     // main render
@@ -208,6 +214,7 @@ export default function DetailView({state, setState}){
         function onSucces(response){
             setImage(response.data);
             setIsLoading(false);
+            
         }
 
         function onFailure(){

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ChromePicker } from 'react-color';
-import '../CSS/color.css';
 
 // https://stackoverflow.com/questions/57810378/how-to-create-dynamic-refs-in-functional-component-using-useref-hook
 // https://stackoverflow.com/questions/35153599/reactjs-get-height-of-an-element

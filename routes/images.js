@@ -1,14 +1,6 @@
 const router = require('express').Router();
 let Image = require('../models/image.model');
 
-// search with keyword
-// router.route('/:keyword').get((req, res) => {
-//   const regex = new RegExp(req.params.keyword, 'i')
-
-//   Image.find({title: {$regex: regex}}).then(images => res.json(images))
-//   .catch(err => res.status(400).json('Error: ' + err));    
-// });
-
 function hexToRgb(hex){
   hex = hex.replace('#','');
   const bigint = parseInt(hex, 16);
@@ -26,11 +18,11 @@ router.route('/').get((req, res) => {
   let query = {'$and': []};
   let page = 1;
 
-  if(keyword){
+  if(keyword !== "undefined" && keyword){
     keyword = new RegExp(req.headers.keyword, 'i');
     query['$and'].push({title: {$regex: keyword}});
   }
-  if(author){
+  if(author !== "undefined" && author){
     author = new RegExp(req.headers.author, 'i');
     query['$and'].push({author: {$regex: author}});
   }
@@ -40,6 +32,7 @@ router.route('/').get((req, res) => {
     const minPercent = 0.1;
 
     for (const color in colorArray) {
+      console.log(colorArray[color])
       let rgb = hexToRgb(colorArray[color]);
         query['$and'].push(
           { colors: { $elemMatch: { "$and": [ 
@@ -51,6 +44,8 @@ router.route('/').get((req, res) => {
         );
     }
   }
+
+  console.log(query)
 
   if(query['$and'].length){
     Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))

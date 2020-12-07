@@ -11,25 +11,33 @@
 
 .button-large{
     background-color: #dddddd;
-    border: 5px solid #333333;
+    border: 2px solid #333333;
     text-align: center;
     text-decoration: none;
+    outline:none;
     cursor: pointer;
-    width: 12.5%;
+    width: 225px;
     margin-right: 1em;
     height: 38px;
 }
 
 #swatch {
-    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
     cursor: pointer;
-    width: 12.5%;
+    width: 225px;
 }
 
 .color {
-    border-radius: 2px;
-    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 38px;
+    .remove-color::after{
+        display: inline-block;
+        content: "\2716";
+        margin-right: 16px;
+    }
 }
+
 #popover {
     position: absolute;
     z-index: 2;
@@ -47,3 +55,4 @@
     display: flex;
     flex-wrap: wrap;
 }
+
