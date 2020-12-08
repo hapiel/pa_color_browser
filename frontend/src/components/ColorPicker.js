@@ -79,11 +79,11 @@ export default function ColorPicker({state, setState}){
         <div>
             <div ref={paletteContainerRef} id={"palette"} className="color-search-container">
                 <DisplayPalette/>
-                <button className="button-large" onClick={newColor}>+</button>
+                <button className="button-large" onClick={newColor}></button>
             </div>
             
             {displayPicker ?
-                <div ref={colorPickerRef} style={{ position: 'absolute', display: 'inline-block', 'left': colorPickerPos.x, 'top': colorPickerPos.y + 40}}>
+                <div ref={colorPickerRef} style={{ position: 'absolute', display: 'inline-block', left: colorPickerPos.x, top: colorPickerPos.y + 40, zIndex: 99}}>
                     <ChromePicker color={state.colorPalette[selectedIndex]} onChange={handleColorChange} disableAlpha={true}/>
                 </div>
             :null

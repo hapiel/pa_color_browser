@@ -47,7 +47,7 @@ export default function DetailView({state, setState}){
     function selectAll(){
         const allColors = []
         for (let i = 0; i < image.colors.length; i++) {
-            allColors.push(image.colors[i]);
+            allColors.push(image.colors[i].hex);
         }
         setSelectedColors(allColors);
     }
@@ -144,8 +144,7 @@ export default function DetailView({state, setState}){
                         <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
                         
                         
-                    </div>
-                    
+                    </div> 
                     <img src={image.url} alt={image.title} id={image.pjId} width={zoomWidth} ></img>
                     </div>
                     <div className="image-metadata">
@@ -161,10 +160,13 @@ export default function DetailView({state, setState}){
                         <p>Dimensions: {image.width} x {image.height}px</p>
                     </div>
                     <div className="palette-bar">
-                        <PaletteBar/>
+                        Sorted by percentage used: <br></br>
+                        <PaletteBar/><br></br>
+                        Sorted by brightness:
                     </div>
                     <div className="color-flex">
                         <div className="color-wrapper">
+                        
                             <Palette/>
                         </div>
                         {Object.keys(swatch).length !== 0  ?<ColorSwatch/>: <></>}

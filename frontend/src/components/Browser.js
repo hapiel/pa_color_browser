@@ -51,7 +51,7 @@ export default function Browser({state, setState}) {
                             <button onClick={() => closeFilter(filter)} type="button" >X</button></div>
                         )}
                     </div>
-                    <button type="submit" onClick={handleSubmit(onSubmit)}>Submit</button>
+                    <button type="submit" onClick={handleSubmit(onSubmit)}>Search</button>
                 </form>
             </div>
             <ShowArtworks/>  
@@ -75,7 +75,7 @@ export default function Browser({state, setState}) {
         let message = "";
         if(isLoading === 0) {message = "Results"}
         if(isLoading === 1) {message = "Loading..."}
-        if(isLoading === 2) {message = "No results. Consider increasing the color tolerance, or removing colors"}
+        if(isLoading === 2) {message = "No results. Consider removing colors"}
         if(isLoading === 3) {message = "Enter search query above"} 
 
         return(
@@ -115,7 +115,7 @@ export default function Browser({state, setState}) {
             headers:{
                 'colorarray': state.colorPalette,
                 'keyword': state.filters.keyword, 
-                'author': state.filters.author
+                'author': state.filters.author,
             }
         })
     }

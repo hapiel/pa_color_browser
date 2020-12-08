@@ -19,8 +19,10 @@ router.route('/').get((req, res) => {
   let page = 1;
 
   if(keyword !== "undefined" && keyword){
-    keyword = new RegExp(req.headers.keyword, 'i');
-    query['$and'].push({title: {$regex: keyword}});
+    let keywordArray = keyword.split(/[ ,]+/);
+    keywordArray = keywordArray.map(function(v){return new RegExp(v)});
+    query['$and'].push({$or: [{ title: {$in: keywordArray }}, { desc: {$in: keywordArray} }]});
+    // query['$and'].push({$or: [{ title: {$text: {$search : keyword} }}, { desc: {$text: {$search : keyword} }}]});
   }
   if(author !== "undefined" && author){
     author = new RegExp(req.headers.author, 'i');
@@ -28,11 +30,12 @@ router.route('/').get((req, res) => {
   }
   if(colorString){
     let colorArray = colorString.split(',');
-    let tolerance = 20;
+    colorArray = colorArray.filter(onlyUnique);
+    console.log(colorArray.length);
+    let tolerance = 2 * colorArray.length + 5;
     const minPercent = 0.1;
 
     for (const color in colorArray) {
-      console.log(colorArray[color])
       let rgb = hexToRgb(colorArray[color]);
         query['$and'].push(
           { colors: { $elemMatch: { "$and": [ 
@@ -45,12 +48,10 @@ router.route('/').get((req, res) => {
     }
   }
 
-  console.log(query)
-
   if(query['$and'].length){
     Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
     .catch(err => res.status(400).json('Error: ' + err));
-  }  
+  }
 });
 
 router.route('/:id').get((req, res) => {
@@ -58,5 +59,9 @@ router.route('/:id').get((req, res) => {
   Image.findOne({pjId: id}).then(images => res.json(images))
   .catch(err => res.status(400).json('Error: ' + err));    
 });
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
 
 module.exports = router;
