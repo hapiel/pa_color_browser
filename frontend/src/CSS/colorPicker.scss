@@ -21,20 +21,30 @@
     height: 38px;
 }
 
-#swatch {
+.swatch {
     cursor: pointer;
     width: 225px;
 }
 
+.swatch:hover{
+    .color{
+        opacity: 1;
+    }
+}
+
+
 .color {
+    opacity: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     height: 38px;
+    
     .remove-color::after{
         display: inline-block;
         content: "\2716";
         margin-right: 16px;
+        text-shadow: 1px 0 0 #DDD, 0 -1px 0 #DDD, 0 1px 0 #DDD, -1px 0 0  #DDD;
     }
 }
 

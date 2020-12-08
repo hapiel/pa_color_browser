@@ -25,7 +25,7 @@ export default function ColorPicker({state, setState}){
     }, [colorPickerRef]);
 
     useEffect(()=>{
-        if(typeof selectedIndex !== 'undefined'){
+        if(typeof selectedIndex !== 'undefined' && paletteRef.current[selectedIndex] !== null){
             setDisplayPicker(true);
             let rect = paletteRef.current[selectedIndex].getBoundingClientRect();
             setColorPickerPos({x: rect['x'], y: rect['y']});
@@ -50,7 +50,7 @@ export default function ColorPicker({state, setState}){
         if(state.colorPalette.length){
             return state.colorPalette.map((color, i) =>
                 <div 
-                    id="swatch" 
+                    className="swatch" 
                     style={{
                         backgroundColor: color,
                         boxShadow: i===selectedIndex? '0px 0px 0px 2px rgba(255,255,255,1) inset': '0px 0px 0px 2px rgba(0, 0, 0, 0) inset'
