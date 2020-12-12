@@ -6,6 +6,7 @@ import Color from './Color';
 import Image from './Image';
 import FormField from './FormField';
 import '../CSS/browser.scss';
+import '../CSS/tooltip.scss';
 import ColorPalette from './ColorPicker';
 
 export default function Browser({state, setState}) {
@@ -14,9 +15,10 @@ export default function Browser({state, setState}) {
     const [isLoading, setIsLoading] = useState(3);
     const { register, handleSubmit } = useForm({defaultValues: state.filters});
     const [activeFilters, setActiveFilters] = useState([]);
-    const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Animation", "Transparency" ])
+    const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Transparency", "Tolerance"]);
 
     const onSubmit = filters => {
+        console.log(filters)
         setIsLoading(1);
         setState(state => ({...state, filters}));
     };
@@ -30,6 +32,7 @@ export default function Browser({state, setState}) {
     return (
         <>
             <div className="top-bar">
+
                 <ColorPalette state={state} setState={setState}/>
                 
                 <form>
@@ -75,12 +78,12 @@ export default function Browser({state, setState}) {
         let message = "";
         if(isLoading === 0) {message = "Results"}
         if(isLoading === 1) {message = "Loading..."}
-        if(isLoading === 2) {message = "No results. Consider removing colors"}
+        if(isLoading === 2) {message = "No results. Consider removing colors or filters, or inrease tolerance."}
         if(isLoading === 3) {message = "Enter search query above"} 
 
         return(
             <div>
-                <h3 style={{color: '#eeeeee', margin: '20px'}}>{message}</h3>
+                <h3 style={{color: '#eeeeee', margin: '20px'}}>{message === "Results"? <span className="tooltip"><span className="tooltiptext">Sorted by date, newest to oldest.</span>Results</span> : message}</h3>
                 {isLoading === 0 &&
                     <div className="grid-container">
                         {data.map((image, i) =>
@@ -116,6 +119,16 @@ export default function Browser({state, setState}) {
                 'colorarray': state.colorPalette,
                 'keyword': state.filters.keyword, 
                 'author': state.filters.author,
+                'colormin': state.filters.colorMin,
+                'colormax': state.filters.colorMax,
+                'sizetype': state.filters.sizeType,
+                'height': state.filters.height,
+                'width': state.filters.width,
+                'beforeDate': state.filters.beforeDate,
+                'afterDate': state.filters.afterDate,
+                // 'animation': state.filters.animation,
+                'transparency': state.filters.transparency,
+                'tolerance': state.filters.tolerance
             }
         })
     }

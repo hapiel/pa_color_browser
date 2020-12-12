@@ -145,7 +145,7 @@ export default function DetailView({state, setState}){
                         
                         
                     </div> 
-                    <img src={image.url} alt={image.title} id={image.pjId} width={zoomWidth} ></img>
+                    <img className="detail-img" src={image.url} alt={image.title} id={image.pjId} width={zoomWidth} ></img>
                     </div>
                     <div className="image-metadata">
                     <div className="meta-text">
@@ -153,9 +153,8 @@ export default function DetailView({state, setState}){
                         
                         <h3>Created by <span>{image.author}</span></h3>
                         <p>{image.desc}</p>
-                        <Tags/>
-                        <p>Number of colors: {image.trans? image.colorCount + 1: image.colorCount} <br></br>
-                        {image.trans? "(" + String(image.colorCount) + " + transparency)" : <></>}
+                        <Tags/> 
+        <p className="tooltip">{image.trans? <span className="tooltiptext">{  image.colorCount - 1 } + transparency </span>: <></>}Number of colors: {image.colorCount} <br></br>
                         </p>
                         <p>Dimensions: {image.width} x {image.height}px</p>
                     </div>

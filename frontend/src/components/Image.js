@@ -32,7 +32,7 @@ export default function Image({image, i, state}){
             
             <div className="overlay"></div>
             <div className="color-count">
-                {image.trans? image.colorCount + 1: image.colorCount} Colors
+                {image.colorCount} Colors
             </div>
             <div className="launch">
                 <LaunchIcon></LaunchIcon>

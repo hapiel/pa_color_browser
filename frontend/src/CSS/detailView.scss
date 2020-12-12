@@ -41,6 +41,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   width: 60%;
+  align-content: flex-start;
 }
 
 .color-tile{
@@ -149,7 +150,6 @@ h2 {
   text-align: right;
 }
 
-img{
+.detail-img{
   margin-top: 1em;
 }
-
