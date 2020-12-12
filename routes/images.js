@@ -20,9 +20,8 @@ router.route('/').get((req, res) => {
 
   if(keyword !== "undefined" && keyword){
     let keywordArray = keyword.split(/[ ,]+/);
-    keywordArray = keywordArray.map(function(v){return new RegExp(v)});
-    query['$and'].push({$or: [{ title: {$in: keywordArray }}, { desc: {$in: keywordArray} }]});
-    // query['$and'].push({$or: [{ title: {$text: {$search : keyword} }}, { desc: {$text: {$search : keyword} }}]});
+    keywordArray = keywordArray.map(function(word){return new RegExp("\\b" + word + "\\b")});
+    query['$and'].push({ $or: [ {title: {$all: keywordArray}}, {desc: {$all: keywordArray}} ]});
   }
   if(author !== "undefined" && author){
     author = new RegExp(req.headers.author, 'i');
