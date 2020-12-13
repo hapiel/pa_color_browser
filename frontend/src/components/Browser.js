@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Color from './Color';
@@ -13,9 +13,13 @@ export default function Browser({state, setState}) {
     let newfilter = true;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(3);
-    const { register, handleSubmit } = useForm({defaultValues: state.filters});
     const [activeFilters, setActiveFilters] = useState([]);
-    const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Transparency", "Tolerance"]);
+    const inactiveFilters = ["Keyword", "Author", "Color count", "Size", "Date", "Transparency", "Tolerance"];
+    const { register, control, handleSubmit } = useForm({defaultValues: state.filters});
+    const { fields , append, remove } = useFieldArray({
+        control,
+        name: "filters"
+    });
 
     const onSubmit = filters => {
         setIsLoading(1);
@@ -28,50 +32,59 @@ export default function Browser({state, setState}) {
         }
     }, [state])
 
+    const addFilter = (filter) => {
+        setActiveFilters([...activeFilters, filter]);
+        append({ filter });
+    }
+
+    const removeFilter = (filter, index) => {
+        setActiveFilters(activeFilters.filter(item => item !== filter));  
+        remove(index);
+    }
+
+    const capitalize = (s) => {
+        if (typeof s !== 'string') return ''
+        return s.charAt(0).toUpperCase() + s.slice(1)
+    }
+
     return (
         <>
             <div className="top-bar">
 
                 <ColorPalette state={state} setState={setState}/>
                 
+                <p>
+                    Add filter:    
+                    <select
+                        
+                        onChange={e => addFilter(e.target.value)}>
+                        <option value="empty">+</option>
+                        {inactiveFilters.map((filter) =>
+                            !activeFilters.includes(filter)&&
+                            <option key={filter} value={filter}>{filter}</option>
+                        )}
+                    </select> 
+                </p>
+                
                 <form>
-                    <p>
-                        Add filter:   
-                        <select id="filter-dropdown" name="newFilter" onChange={(e) => {filterDropdown(e.target.value)}} >
-                                <option value="empty">+</option>
-                                    {inactiveFilters.map((filter, i) =>
-                                        activeFilters.includes(filter)?<></>:<option value={filter}>{filter}</option>
-                                    )}
-                        </select>          
-                    </p>
-
                     <div>
-                        {activeFilters.length > 0? activeFilters.map((filter, index)=>
-                            <div className="filter-box">
-                                {/* {filter} */}
-                                <FormField filter={filter} register={register}/> 
-                            <button onClick={() => closeFilter(filter)} type="button" >X</button></div>
-                        ):null}
+                        {fields.map((field, index) => {
+                            return (
+                                <div className="filter-box" key={field.id}>
+                                    <FormField filter={field.filter} register={register}/> 
+                                    <button type="button" onClick={()=> removeFilter(field.filter, index)}>X</button>
+                                </div>
+                            )       
+                        })}
                     </div>
-                    <button type="submit" onClick={handleSubmit(onSubmit)}>Search</button>
+                        {state.colorPalette.length < 1 && activeFilters.length < 1? null
+                        :<button id="search-button" type="submit" onClick={handleSubmit(onSubmit)}>Search</button>}
+                    
                 </form>
             </div>
             <ShowArtworks/>  
         </>
     )
-    
-    function filterDropdown(filter){
-        if (filter !== "") {
-            // setInactiveFilters(inactiveFilters.filter(item => item !== filter));
-            setActiveFilters([...activeFilters, filter]);
-            document.getElementById("filter-dropdown").value = "empty";
-        }
-    }
-
-    function closeFilter(filter){
-        setActiveFilters(activeFilters.filter(item => item !== filter));       
-        // setInactiveFilters(inactiveFilters.concat(filter));
-    }
 
     function ShowArtworks() {
         let message = "";
