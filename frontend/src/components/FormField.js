@@ -43,10 +43,10 @@ export default function FormField({register, filter}){
         case "Date":
             return (
                 <>
-                Date before 
-                    <input type="date" name="beforeDate" ref={register}></input> 
-                     Date after 
+                    Date after 
                     <input type="date" name="afterDate" ref={register}></input> 
+                     Date before 
+                    <input type="date" name="beforeDate" ref={register}></input> 
                 </>    
             )
         // case "Animation":

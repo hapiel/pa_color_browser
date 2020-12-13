@@ -20,6 +20,8 @@ export default function DetailView({state, setState}){
     let { id } = useParams();
 
     useEffect(()=>{
+        setDetailLoading(true);
+        setRelatingLoading(true);
         getImage(id);
     },[id])
 
@@ -29,7 +31,7 @@ export default function DetailView({state, setState}){
             colorarray = JSON.stringify(colorarray);
             getRelatingArtworks(colorarray);
         }
-    }, [detailLoading])
+    },[detailLoading])
 
     function ShowDetail() {
         if (detailLoading) {
@@ -199,8 +201,9 @@ export default function DetailView({state, setState}){
     }
     function ShowRelatingArtworks() {
         let message = "";
-        if(relatingLoading === true) {message = "Loading"}
-        if(relatingLoading === false) {message = "Relating artworks"}
+        if(relatingLoading === true) {message = "Loading artworks with similar palettes"}
+        if(relatingLoading === false) {message = "Artworks with similar palettes"}
+        if(data.length === 0 && relatingLoading === false) {message = "No artworks with similar palettes found..."}
 
         return(
             <div>
@@ -256,7 +259,15 @@ export default function DetailView({state, setState}){
 
         function onSucces(response){
             if (response.data.length > 0){
-                setData(response.data);
+                let relatingArtworks = response.data
+
+                for (let color in relatingArtworks) {
+                    if(relatingArtworks[color].pjId === image.pjId){
+                        relatingArtworks.splice(color, 1);
+                    }
+                }
+
+                setData(relatingArtworks);
                 setRelatingLoading(false);
             }
         }
