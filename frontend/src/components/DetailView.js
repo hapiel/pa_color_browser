@@ -4,24 +4,35 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { useParams, Link } from 'react-router-dom';
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
+import Image from './Image';
 import { ReactComponent as GoBackIcon } from '../icons/gobackicon.svg';
 import { ReactComponent as LaunchIcon } from '../icons/launchicon.svg';
 
 export default function DetailView({state, setState}){
+    const [data, setData] = useState([]);
     const [image, setImage] = useState();
     const [selectedColors, setSelectedColors] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [detailLoading, setDetailLoading] = useState(true);
+    const [relatingLoading, setRelatingLoading] = useState(true);
     const [copied, setCopied] = useState();
     const [swatch, setSwatch] = useState({});
     const [zoomWidth, setZoomWidth] = useState();
     let { id } = useParams();
 
     useEffect(()=>{
-        getImage(id)
+        getImage(id);
     },[id])
 
+    useEffect(()=>{
+        if(detailLoading===false){
+            let colorarray = image.colors.slice(0, 4);
+            colorarray = JSON.stringify(colorarray);
+            getRelatingArtworks(colorarray);
+        }
+    }, [detailLoading])
+
     function ShowDetail() {
-        if (isLoading) {
+        if (detailLoading) {
             return <h3>Loading...</h3>
         } 
         return <Details/>
@@ -122,7 +133,6 @@ export default function DetailView({state, setState}){
             <div className="detail-view">
                 <div className="detail-top-bar">
                     <div className="return-bar">
-                        
                         <Link 
                             onClick={()=>updatePalette()}
                             to={{pathname:'/'}}
@@ -136,41 +146,40 @@ export default function DetailView({state, setState}){
                     </div>
                 </div>
                 <div className="detail-container">
-            
                     <div className="image-large">
-                    <div className="zoom-detail">
-                        zoom<br/>
-                        <button type="button" onClick={()=>zoomOut(image.pjId)}>-</button>
-                        <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
-                        
-                        
-                    </div> 
-                    <img className="detail-img" src={image.url} alt={image.title} id={image.pjId} width={zoomWidth} ></img>
+                        <div className="zoom-detail">
+                            zoom<br/>
+                            <button type="button" onClick={()=>zoomOut(image.pjId)}>-</button>
+                            <button type="button" onClick={()=>zoomIn(image.pjId)}>+</button>
+                        </div> 
+                        <img className="detail-img" src={image.url} alt={image.title} id={image.pjId} width={zoomWidth} ></img>
                     </div>
                     <div className="image-metadata">
-                    <div className="meta-text">
-                        <h2>{image.title}</h2>
-                        
-                        <h3>Created by <span>{image.author}</span></h3>
-                        <p>{image.desc}</p>
-                        <Tags/> 
-        <p className="tooltip">{image.trans? <span className="tooltiptext">{  image.colorCount - 1 } + transparency </span>: <></>}Number of colors: {image.colorCount} <br></br>
-                        </p>
-                        <p>Dimensions: {image.width} x {image.height}px</p>
-                    </div>
-                    <div className="palette-bar">
-                        Sorted by percentage used: <br></br>
-                        <PaletteBar/><br></br>
-                        Sorted by brightness:
-                    </div>
-                    <div className="color-flex">
-                        <div className="color-wrapper">
-                        
-                            <Palette/>
+                        <div className="meta-text">
+                            <h2>{image.title}</h2>
+                            <h3>Created by <span>{image.author}</span></h3>
+                            <p>{image.desc}</p>
+                            <Tags/> 
+                            <p className="tooltip">
+                                {image.trans ? <span className="tooltiptext">{  image.colorCount - 1 }+ transparency</span>:<></>}
+                                Number of colors: {image.colorCount} 
+                                <br></br>
+                            </p>
+                            <p>
+                                Dimensions: {image.width} x {image.height}px
+                            </p>
                         </div>
-                        {Object.keys(swatch).length !== 0  ?<ColorSwatch/>: <></>}
-                        
-                    </div>
+                        <div className="palette-bar">
+                            Sorted by percentage used: <br></br>
+                            <PaletteBar/><br></br>
+                            Sorted by brightness:
+                        </div>
+                        <div className="color-flex">
+                            <div className="color-wrapper">
+                                <Palette/>
+                            </div>
+                            {Object.keys(swatch).length !== 0  ?<ColorSwatch/>: <></>}
+                        </div>
                         <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
                         <span className="select-all">
                             <button onClick={()=>selectAll()}>
@@ -182,10 +191,28 @@ export default function DetailView({state, setState}){
                         </span>
                     </div>
                 </div>
-                <div className="related-art">
-                    RELATED ARTWORKS GO HEREE
+                <div className="related-art" style={{ backgroundColor: '#3A3A3C'}}>
+                    <ShowRelatingArtworks/>
                 </div>
             </div> 
+        )
+    }
+    function ShowRelatingArtworks() {
+        let message = "";
+        if(relatingLoading === true) {message = "Loading"}
+        if(relatingLoading === false) {message = "Relating artworks"}
+
+        return(
+            <div>
+                <h3 style={{color: '#eeeeee', margin: '20px'}}>{message === "Results"? <span className="tooltip"><span className="tooltiptext">Sorted by date, newest to oldest.</span>Results</span> : message}</h3>
+                {relatingLoading === false &&
+                    <div className="grid-container">
+                        {data.map((image, i) =>
+                            <Image image={image} key={i} state={state} setState={setState}/>
+                        )}
+                    </div>
+                }
+            </div>
         )
     }
 
@@ -214,8 +241,7 @@ export default function DetailView({state, setState}){
 
         function onSucces(response){
             setImage(response.data);
-            setIsLoading(false);
-            
+            setDetailLoading(false);
         }
 
         function onFailure(){
@@ -223,5 +249,26 @@ export default function DetailView({state, setState}){
         }
 
         Api.get(`/api/${id}`, validator, onSucces, onFailure)
+    }
+
+    function getRelatingArtworks(colorarray){
+        function validator(response){}
+
+        function onSucces(response){
+            if (response.data.length > 0){
+                setData(response.data);
+                setRelatingLoading(false);
+            }
+        }
+
+        function onFailure(){
+            throw new ValidationError("Failed");
+        }
+
+        Api.get(`/api/${id}/relatingworks`, validator, onSucces, onFailure, {
+            headers:{
+                'colorarray': colorarray
+            }
+        })
     }
 }

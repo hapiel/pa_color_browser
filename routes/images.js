@@ -10,6 +10,43 @@ function hexToRgb(hex){
   return [r, g, b] 
 }
 
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+// GET IMAGE DETAILS
+router.route('/:id').get((req, res) => {
+  const id = parseInt(req.params.id);
+  Image.findOne({pjId: id}).then(images => res.json(images))
+  .catch(err => res.status(400).json('Error: ' + err));    
+});
+
+// GET RELATING ARTWORKS
+router.route('/:id/relatingworks').get((req, res) => {
+  let colorObject = JSON.parse(req.headers.colorarray);
+  const tolerance = 2;
+  const minPercent = 0.15;
+  let page = 1;
+  let query = {'$and': []};
+
+  for (const color in colorObject) {
+    let rgb = colorObject[color].rgb;
+        query['$and'].push(
+          { colors: { $elemMatch: { "$and": [ 
+            {"rgb.0": {$gte: rgb[0]-tolerance, $lte: rgb[0]+tolerance}}, 
+            {"rgb.1": {$gte: rgb[1]-tolerance, $lte: rgb[1]+tolerance}}, 
+            {"rgb.2": {$gte: rgb[2]-tolerance, $lte: rgb[2]+tolerance}}, 
+            {percent: {$gte: minPercent}},
+          ]}}},
+      );
+  }
+
+  if(query['$and'].length){
+    Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
+    .catch(err => res.status(400).json('Error: ' + err));
+  }
+});
+
 // BUILD QUERY
 router.route('/').get((req, res) => {
   let colorString = req.headers.colorarray;
@@ -135,15 +172,5 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
   }
 });
-
-router.route('/:id').get((req, res) => {
-  const id = parseInt(req.params.id);
-  Image.findOne({pjId: id}).then(images => res.json(images))
-  .catch(err => res.status(400).json('Error: ' + err));    
-});
-
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
 
 module.exports = router;

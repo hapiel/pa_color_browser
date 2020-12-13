@@ -18,7 +18,6 @@ export default function Browser({state, setState}) {
     const [inactiveFilters, setInactiveFilters] = useState(["Keyword", "Author", "Color count", "Size", "Date", "Transparency", "Tolerance"]);
 
     const onSubmit = filters => {
-        console.log(filters)
         setIsLoading(1);
         setState(state => ({...state, filters}));
     };
@@ -40,19 +39,19 @@ export default function Browser({state, setState}) {
                         Add filter:   
                         <select id="filter-dropdown" name="newFilter" onChange={(e) => {filterDropdown(e.target.value)}} >
                                 <option value="empty">+</option>
-                            {inactiveFilters.map((filter, i) =>
+                                    {inactiveFilters.map((filter, i) =>
                                         activeFilters.includes(filter)?<></>:<option value={filter}>{filter}</option>
-                                        
                                     )}
                         </select>          
                     </p>
 
                     <div>
-                        {activeFilters.map((filter, index)=>
+                        {activeFilters.length > 0? activeFilters.map((filter, index)=>
                             <div className="filter-box">
+                                {/* {filter} */}
                                 <FormField filter={filter} register={register}/> 
                             <button onClick={() => closeFilter(filter)} type="button" >X</button></div>
-                        )}
+                        ):null}
                     </div>
                     <button type="submit" onClick={handleSubmit(onSubmit)}>Search</button>
                 </form>

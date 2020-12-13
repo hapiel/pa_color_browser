@@ -5,13 +5,13 @@ export default function FormField({register, filter}){
         case "Keyword":
             return (
                 <>
-                <span className="tooltip"><span className="tooltiptext">Searches in title and tags</span>Keyword: </span><input name='keyword' ref={register}></input> 
+                <span className="tooltip"><span className="tooltiptext">Searches in title and tags</span>Keyword: </span><input id="keyword" name='keyword' ref={register}></input> 
                 </>    
             )
         case "Author":
             return (
                 <>
-                <span className="tooltip"><span className="tooltiptext">Name or part of name</span>Author: </span><input name='author' ref={register}></input> 
+                <span className="tooltip"><span className="tooltiptext">Name or part of name</span>Author: </span><input id="author" name='author' ref={register}></input> 
                 </>    
             )
         case "Color count":
