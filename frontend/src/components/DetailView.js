@@ -102,8 +102,24 @@ export default function DetailView({state, setState}){
 
     function updatePalette(){
         if(selectedColors.length){
-            setState(state => ({...state, colorPalette: state.colorPalette.concat(selectedColors)}));
+            setState(state => ({ colorPalette: selectedColors}));
         }
+    }
+
+    function updateTag(tag){
+        console.log(state);
+        setState(state => ({ 
+            colorPalette: {},
+            filters: {keyword: tag}}));
+        
+    }
+
+    function updateAuthor(author){
+        console.log(state);
+        setState(state => ({ 
+            colorPalette: {},
+            filters: {author: author}}));
+        
     }
 
     function copyText(hex){
@@ -115,7 +131,7 @@ export default function DetailView({state, setState}){
             return(
                 <p>Tags: 
                     {image.tags.map((tag, i) =>
-                        <span key={i}>{tag}{i !== image.tags.length - 1 && ', ' }</span>
+                        <Link key={i} to="/" onClick={()=>updateTag(tag)}>{tag}{i !== image.tags.length - 1 && ', ' }</Link>
                     )}
                 </p>
             )
@@ -136,7 +152,7 @@ export default function DetailView({state, setState}){
                 <div className="detail-top-bar">
                     <div className="return-bar">
                         <Link 
-                            onClick={()=>updatePalette()}
+                            // onClick={()=>updatePalette()}
                             to={{pathname:'/'}}
                             className="vertical-center"
                             >
@@ -159,7 +175,7 @@ export default function DetailView({state, setState}){
                     <div className="image-metadata">
                         <div className="meta-text">
                             <h2>{image.title}</h2>
-                            <h3>Created by <span>{image.author}</span></h3>
+                            <h3>Created by  <Link to="/" onClick={()=>updateAuthor(image.author)}>{image.author}</Link></h3>
                             <p>{image.desc}</p>
                             <Tags/> 
                             <p className="tooltip">
@@ -182,7 +198,7 @@ export default function DetailView({state, setState}){
                             </div>
                             {Object.keys(swatch).length !== 0  ?<ColorSwatch/>: <></>}
                         </div>
-                        <button onClick={()=>alert("Sorry, this feature doesn't work yet :(")}>Search with selected colors</button>
+                        <Link to={{pathname:'/'}}><button onClick={()=>updatePalette()} >Search with selected colors</button></Link>
                         <span className="select-all">
                             <button onClick={()=>selectAll()}>
                                 select all
