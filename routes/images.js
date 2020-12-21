@@ -42,7 +42,7 @@ router.route('/:id/relatingworks').get((req, res) => {
   }
 
   if(query['$and'].length){
-    Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
+    Image.find(query).skip((page-1)*10).limit(100).sort({faves: -1}).then(images => res.json(images))
     .catch(err => res.status(400).json('Error: ' + err));
   }
 });
@@ -168,7 +168,7 @@ router.route('/').get((req, res) => {
   }
 
   if(query['$and'].length){
-    Image.find(query).skip((page-1)*10).limit(100).sort({pjId: -1}).then(images => res.json(images))
+    Image.find(query).skip((page-1)*10).limit(100).sort({faves: -1}).then(images => res.json(images))
     .catch(err => res.status(400).json('Error: ' + err));
   }
 });

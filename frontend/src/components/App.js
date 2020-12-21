@@ -12,9 +12,9 @@ function App() {
         <Route path="/" exact>
           <Browser state={state} setState={setState}/>
         </Route>
-        <Route path="/detail/:id" exact>
-          <DetailView state={state} setState={setState}/>
-        </Route>
+        <Route path="/detail/:id" render={(props) => (
+          <DetailView key={props.match.params.id} state={state} setState={setState} />)
+        } />
       </Switch>
     </Router>
   );

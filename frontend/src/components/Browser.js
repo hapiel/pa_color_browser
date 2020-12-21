@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from "react-hook-form";
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
-import Color from './Color';
 import Image from './Image';
 import FormField from './FormField';
 import '../CSS/browser.scss';
@@ -15,11 +14,26 @@ export default function Browser({state, setState}) {
     const [isLoading, setIsLoading] = useState(3);
     const [activeFilters, setActiveFilters] = useState([]);
     const inactiveFilters = ["Keyword", "Author", "Color count", "Size", "Date", "Transparency", "Tolerance"];
-    const { register, control, handleSubmit } = useForm({defaultValues: state.filters});
+    const { register, watch, handleSubmit, control } = useForm({defaultValues: state.filters});
     const { fields , append, remove } = useFieldArray({
         control,
-        name: "filters"
+        name: "filters",
     });
+
+    useEffect(()=>{
+        if(state.filters && Object.keys(state.filters)){
+            if (!Object.keys(state.filters).length == 0) {
+                for (const filter in state.filters) {
+                    append({filter: capitalize(filter)})
+                }       
+            }
+        }
+    },[])
+
+    const capitalize = (s) => {
+        if (typeof s !== 'string') return ''
+        return s.charAt(0).toUpperCase() + s.slice(1)
+    }
 
     const onSubmit = filters => {
         setIsLoading(1);
@@ -42,14 +56,10 @@ export default function Browser({state, setState}) {
         remove(index);
     }
 
-    const capitalize = (s) => {
-        if (typeof s !== 'string') return ''
-        return s.charAt(0).toUpperCase() + s.slice(1)
-    }
-
     return (
         <>
             <div className="top-bar">
+                <p>Add color:</p>
 
                 <ColorPalette state={state} setState={setState}/>
                 
@@ -71,7 +81,7 @@ export default function Browser({state, setState}) {
                         {fields.map((field, index) => {
                             return (
                                 <div className="filter-box" key={field.id}>
-                                    <FormField filter={field.filter} register={register}/> 
+                                    <FormField register={register} watch={watch} filter={field.filter} /> 
                                     <button type="button" onClick={()=> removeFilter(field.filter, index)}>X</button>
                                 </div>
                             )       
@@ -95,7 +105,7 @@ export default function Browser({state, setState}) {
 
         return(
             <div>
-                <h3 style={{color: '#eeeeee', margin: '20px'}}>{message === "Results"? <span className="tooltip"><span className="tooltiptext">Sorted by date, newest to oldest.</span>Results</span> : message}</h3>
+                <h3 style={{color: '#eeeeee', margin: '20px'}}>{message === "Results"? <div><span className="tooltip"><span className="tooltiptext">Sorted by date, newest to oldest.</span>Results</span><span className="float-right">{data.length == 100? data.length.toString() + "+" : data.length} entries found</span> </div>: message}</h3>
                 {isLoading === 0 &&
                     <div className="grid-container">
                         {data.map((image, i) =>
@@ -113,7 +123,6 @@ export default function Browser({state, setState}) {
 
         function onSucces(response){
             if (response.data.length > 0){
-                console.log(response);
                 setData(response.data);
                 setIsLoading(0);
             } else {

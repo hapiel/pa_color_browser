@@ -26,6 +26,34 @@ img {
   vertical-align: middle;
 }
 
+.tolerance {
+  -webkit-appearance: none;  
+  appearance: none;
+  height: 2px ;
+  background: #fff;
+  vertical-align: middle;
+  display: inline;
+}
+
+.tolerance::-webkit-slider-thumb {
+  background: #fff;
+  cursor: pointer;
+}
+
+.tolerance::-moz-range-thumb {
+  background: #fff;
+  cursor: pointer;
+}
+
+.float-right{
+  float: right;
+}
+
+.tolerance {
+  background: #FFF;
+  
+}
+
 .grid-container{
 
   justify-content: center;   

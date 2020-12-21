@@ -18,7 +18,7 @@ export default function DetailView({state, setState}){
     const [swatch, setSwatch] = useState({});
     const [zoomWidth, setZoomWidth] = useState();
     let { id } = useParams();
-
+    
     useEffect(()=>{
         setDetailLoading(true);
         setRelatingLoading(true);
@@ -239,7 +239,6 @@ export default function DetailView({state, setState}){
         var img = document.getElementById(id);
         var width = img.clientWidth;
         setZoomWidth((width * 2) + "px");
-        // img.style.width = (width * 2) + "px";
     }
 
     function zoomOut(id) {
@@ -247,7 +246,7 @@ export default function DetailView({state, setState}){
         var width = img.clientWidth;
         if (width === img.naturalWidth) return false;
         setZoomWidth((width / 2) + "px");
-        // img.style.width = (width / 2) + "px";
+        
     }
 
     // main render

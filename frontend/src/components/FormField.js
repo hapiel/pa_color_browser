@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function FormField({register, filter}){
+export default function FormField({register, watch, filter}){
     switch(filter){
         case "Keyword":
             return (
@@ -64,12 +64,11 @@ export default function FormField({register, filter}){
         case "Tolerance":
             return (
                 <>
-                <span className="tooltip"><span className="tooltiptext">Tolerance influences how accurate the colors of your query match the colors in the search result. 0 means exact match only, 20 means your r/g/b values +/- 20 for each of those values. Default is between 7 and 25 depending on the amount of colors in the query.</span>Color tolerance: </span><input name="tolerance" size="2" ref={register()}></input>
+                <span className="tooltip"><span className="tooltiptext">Tolerance influences how accurate the colors of your query match the colors in the search result. 0 means exact match only, 20 means your r/g/b values +/- 20 for each of those values. Default is between 7 and 25 depending on the amount of colors in the query.</span>Color tolerance: </span><input name="tolerance" className="tolerance" type="range" min={0} max={40} step={1} ref={register()}></input><span id="range-value"> {watch('tolerance')}</span>
                 </>    
             )
         default:
-            console.log("formfield:");
-            console.log(filter);
             return <p>NOTHING  I GUESS</p>
     }    
+
 }

@@ -40,6 +40,15 @@ export default function ColorPicker({state, setState}){
         setDisplayPicker(true);
     }
 
+    const removeColor = (color) => {
+        setDisplayPicker(false);
+        setSelectedIndex(undefined);
+        setState(state=>({
+            ...state, 
+            colorPalette: state.colorPalette.filter(item => item !== color)
+        }))
+    }
+
     const handleColorChange = (color) => {
         let paletteCopy = state.colorPalette;
         paletteCopy[selectedIndex] = color.hex;
@@ -61,12 +70,7 @@ export default function ColorPicker({state, setState}){
                     <div className="color">
                         <div 
                             className="remove-color" 
-                            onClick={()=>
-                                setState(state=>({
-                                    ...state, 
-                                    colorPalette: state.colorPalette.filter(item => item !== color)
-                                }))
-                            }
+                            onClick={()=> removeColor(color)}
                         ></div>
                     </div>
                 </div>
