@@ -65,11 +65,11 @@ router.route('/').get((req, res) => {
   let query = {'$and': []};
   let page = 1;
 
-  // KEYWORD TITLE || DESCRIPTION
+  // KEYWORD TITLE || TAGS
   if(keyword !== "undefined" && keyword){
     let keywordArray = keyword.split(/[ ,]+/);
     keywordArray = keywordArray.map(function(word){return new RegExp("\\b" + word + "\\b", "i")});
-    query['$and'].push({ $or: [ {title: {$all: keywordArray}}, {desc: {$all: keywordArray}} ]});
+    query['$and'].push({ $or: [ {title: {$all: keywordArray}}, {tags: {$all: keywordArray}} ]});
   }
 
   // AUTHOR

@@ -30,9 +30,9 @@ img {
   -webkit-appearance: none;  
   appearance: none;
   height: 2px ;
+  margin: auto;
   background: #fff;
-  vertical-align: middle;
-  display: inline;
+ 
 }
 
 .tolerance::-webkit-slider-thumb {
