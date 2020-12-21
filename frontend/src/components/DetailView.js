@@ -107,17 +107,15 @@ export default function DetailView({state, setState}){
     }
 
     function updateTag(tag){
-        console.log(state);
         setState(state => ({ 
-            colorPalette: {},
+            colorPalette: [],
             filters: {keyword: tag}}));
         
     }
 
     function updateAuthor(author){
-        console.log(state);
         setState(state => ({ 
-            colorPalette: {},
+            colorPalette: [],
             filters: {author: author}}));
         
     }
