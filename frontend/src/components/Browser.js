@@ -9,7 +9,6 @@ import '../CSS/tooltip.scss';
 import ColorPalette from './ColorPicker';
 
 export default function Browser({state, setState}) {
-    let newfilter = true;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(3);
     const [activeFilters, setActiveFilters] = useState([]);
@@ -24,7 +23,7 @@ export default function Browser({state, setState}) {
         if(state.filters && Object.keys(state.filters)){
             if (!Object.keys(state.filters).length == 0) {
                 for (const filter in state.filters) {
-                    append({filter: capitalize(filter)})
+                    addFilter(capitalize(filter));
                 }       
             }
         }
@@ -152,5 +151,4 @@ export default function Browser({state, setState}) {
                 'tolerance': state.filters.tolerance
             }
         })
-    }
-}
+    }}

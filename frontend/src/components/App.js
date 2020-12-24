@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Browser from '../components/Browser';
 import DetailView from '../components/DetailView';
+import About from '../components/About';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -15,6 +16,9 @@ function App() {
         <Route path="/detail/:id" render={(props) => (
           <DetailView key={props.match.params.id} state={state} setState={setState} />)
         } />
+        <Route path="/about" exact>
+          <About/>
+        </Route>
       </Switch>
     </Router>
   );

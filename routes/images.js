@@ -62,8 +62,9 @@ router.route('/').get((req, res) => {
   let animation = req.headers.animation;
   let transparency = req.headers.transparency;
   let tolerance = req.headers.tolerance;
-  let query = {'$and': []};
   let page = 1;
+  let query = {'$and': []};
+
 
   // KEYWORD TITLE || TAGS
   if(keyword !== "undefined" && keyword){
@@ -152,7 +153,14 @@ router.route('/').get((req, res) => {
     } else {
       tolerance = parseInt(tolerance);
     }
-    const minPercent = 0.1;
+    let minPercent = 0.1;
+    if (colorArray.length === 3){
+      minPercent = 0.05;
+    } else if (colorArray.length > 3 && colorArray.length <= 6){
+      minPercent = 0.01;      
+    } else if (colorArray.length > 6){
+      minPercent = 0;
+    }
 
     for (const color in colorArray) {
       let rgb = hexToRgb(colorArray[color]);
