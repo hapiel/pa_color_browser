@@ -5,6 +5,17 @@ html, body, :root {
 :root{
   background-color: #3A3A3C;
 }
+.no-decoration{
+  text-decoration: none;
+}
+
+#header{
+  font-size: 1.17em;
+  font-weight: bolder;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 #search-button{
   background-color: #dddddd;

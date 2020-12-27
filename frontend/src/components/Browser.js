@@ -8,6 +8,7 @@ import '../CSS/browser.scss';
 import '../CSS/tooltip.scss';
 import ColorPalette from './ColorPicker';
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useParams, Link } from 'react-router-dom';
 
 export default function Browser({state, setState}) {
     const [data, setData] = useState([]);
@@ -21,10 +22,6 @@ export default function Browser({state, setState}) {
         control,
         name: "filters",
     });
-
-    useEffect(()=>{
-        getImages();
-    },[])
 
     useEffect(()=>{
         if(state.filters && Object.keys(state.filters)){
@@ -68,12 +65,18 @@ export default function Browser({state, setState}) {
     return (
         <>
             <div className="top-bar">
-                <h3>Color:</h3>
+                <div id="header">
+                    <p>Pixel Art by Color</p>
+                    <Link className={"no-decoration"}  to={{pathname:'/about'}}><p>About</p></Link>
+                </div>
+                <p>Add a color or filter to get started</p>
+                
+                <h3>Color</h3>
 
                 <ColorPalette state={state} setState={setState}/>
                 
                 <p>
-                    <h3>Add filter:</h3>
+                    <h3>Add filter</h3>
                 
                     <select
                         
