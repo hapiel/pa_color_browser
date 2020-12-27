@@ -13,6 +13,7 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.14.0",
     "react-hook-form": "^6.11.5",
+    "react-infinite-scroll-component": "^5.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0"
   },

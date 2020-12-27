@@ -102,8 +102,8 @@ export default function DetailView({state, setState}){
 
     function updatePalette(){
         if(selectedColors.length){
-            setState(state => ({ colorPalette: selectedColors}));
-        }
+            setState(state => ({ ...state, colorPalette: selectedColors}));
+        } 
     }
 
     function updateTag(tag){
@@ -196,7 +196,8 @@ export default function DetailView({state, setState}){
                             </div>
                             {Object.keys(swatch).length !== 0  ?<ColorSwatch/>: <></>}
                         </div>
-                        <Link to={{pathname:'/'}}><button onClick={()=>updatePalette()} >Search with selected colors</button></Link>
+                        {selectedColors.length?<Link to={{pathname:'/'}}><button onClick={()=>updatePalette()} >Search with selected colors</button></Link>:null}
+                        
                         <span className="select-all">
                             <button onClick={()=>selectAll()}>
                                 select all

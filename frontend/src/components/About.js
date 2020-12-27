@@ -22,7 +22,7 @@ export default function About(){
                 <h1>About</h1>
                 <p>In the pixel art color browsing app you can find works from pixeljoint.com, but only works that were published before October 14th 2020.</p>
 
-                <p>If the pixel art is an animation, color count and palette are analysed on the first frame. </p>
+                <p>If the artwork is an animation, color count and palette are analysed on the first frame. </p>
 
                 <p>This site was created by <a href="http://pixeljoint.com/p/9092.htm">Hapiel</a> and <a href="https://nl.linkedin.com/in/marinus-van-den-oever-0aa46117a">Marinus</a> as a research project in HCI, you can read the paper about it here.</p>
 

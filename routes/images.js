@@ -62,7 +62,7 @@ router.route('/').get((req, res) => {
   let animation = req.headers.animation;
   let transparency = req.headers.transparency;
   let tolerance = req.headers.tolerance;
-  let page = 1;
+  let page = req.headers.page;
   let query = {'$and': []};
 
 
@@ -176,7 +176,7 @@ router.route('/').get((req, res) => {
   }
 
   if(query['$and'].length){
-    Image.find(query).skip((page-1)*10).limit(100).sort({faves: -1}).then(images => res.json(images))
+    Image.find(query).skip((page-1)*50).limit(50).sort({faves: -1}).then(images => res.json(images))
     .catch(err => res.status(400).json('Error: ' + err));
   }
 });

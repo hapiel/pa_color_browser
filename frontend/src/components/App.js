@@ -6,6 +6,16 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   const [state, setState] = useState({colorPalette: [], filters: {}});
+  
+  function randomColor(){
+    return "#"+((1<<24)*Math.random()|0).toString(16);
+  }
+
+  // first time visit
+  if (! localStorage.noFirstVisit) {
+    setState(state => ({ ...state, colorPalette: [randomColor()]}));
+    localStorage.noFirstVisit = "1";
+  }
 
   return (
     <Router>
