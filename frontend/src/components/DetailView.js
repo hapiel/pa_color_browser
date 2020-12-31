@@ -7,6 +7,7 @@ import ValidationError from '../util/ValidationError';
 import Image from './Image';
 import { ReactComponent as GoBackIcon } from '../icons/gobackicon.svg';
 import { ReactComponent as LaunchIcon } from '../icons/launchicon.svg';
+import loadingIcon from '../icons/loading.gif';
 
 export default function DetailView({state, setState}){
     const [data, setData] = useState([]);
@@ -33,9 +34,31 @@ export default function DetailView({state, setState}){
         }
     },[detailLoading])
 
+    function LoadingIcon(){
+        return(
+            <div style={{
+                height: '100%',
+                position: 'relative',
+            }}>
+                <img 
+                    src={loadingIcon} 
+                    alt="loading..."
+                    style={{
+                        position: 'absolute',
+                        left:0,
+                        top:0,
+                        right: 0,
+                        bottom: 0,
+                        margin: 'auto',
+                    }} 
+                />
+            </div>
+        )
+    }
+
     function ShowDetail() {
         if (detailLoading) {
-            return null;
+            return <LoadingIcon/>
         } 
         return <Details/>
     }
@@ -223,6 +246,9 @@ export default function DetailView({state, setState}){
         return(
             <div>
                 <h3 style={{color: '#eeeeee', margin: '20px'}}>{message === "Results"? <span className="tooltip"><span className="tooltiptext">Sorted by date, newest to oldest.</span>Results</span> : message}</h3>
+                {relatingLoading === true &&
+                    <LoadingIcon/>
+                }
                 {relatingLoading === false &&
                     <div className="grid-container">
                         {data.map((image, i) =>

@@ -9,6 +9,7 @@ import FormField from './FormField';
 import ColorPalette from './ColorPicker';
 import '../CSS/browser.scss';
 import '../CSS/tooltip.scss';
+import loadingIcon from '../icons/loading.gif';
 
 export default function Browser({state, setState}) {
     const [data, setData] = useState([]);
@@ -61,7 +62,7 @@ export default function Browser({state, setState}) {
         setMoreImages(true);
         setData([]);
         setLoading(true);
-        setMessage("Loading");
+        setMessage('Loading');
         setState(state => ({...state, filters}));
     };
 
@@ -124,7 +125,7 @@ export default function Browser({state, setState}) {
                     <span className="tooltiptext">
                         Sorted by date, newest to oldest.
                     </span>
-                    {message}
+                    {message==="Results" && message}
                 </span>
                 {data.length > 0 && 
                     <span className="float-right">
@@ -132,6 +133,26 @@ export default function Browser({state, setState}) {
                     </span>
                 }
             </h3>
+            {message==="Loading" 
+                &&
+                <div style={{
+                    height: '25%',
+                    position: 'relative',
+                }}>
+                    <img 
+                        src={loadingIcon} 
+                        alt="loading..."
+                        style={{
+                            position: 'absolute',
+                            left:0,
+                            top:0,
+                            right: 0,
+                            bottom: 0,
+                            margin: 'auto',
+                        }} 
+                    />
+                </div>
+            } 
             <ShowArtworks/>  
         </>
     )
