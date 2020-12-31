@@ -35,7 +35,7 @@ export default function DetailView({state, setState}){
 
     function ShowDetail() {
         if (detailLoading) {
-            return <h3>Loading...</h3>
+            return null;
         } 
         return <Details/>
     }

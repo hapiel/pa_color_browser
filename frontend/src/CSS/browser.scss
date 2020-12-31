@@ -9,12 +9,18 @@ html, body, :root {
   text-decoration: none;
 }
 
+h3 {margin: 10px 0 5px;}
+
 #header{
   font-size: 1.17em;
   font-weight: bolder;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  p{
+    margin: 0em;
+  }
 }
 
 #search-button{
@@ -78,10 +84,9 @@ img {
   object-fit: none;
 }
 
-
 .filter-box {
   display: inline-flex;
-  padding: 4px 6px;
+  padding: 4px 4px;
   background-color: #dddddd;
   border: 2px solid #333333;
   border-radius: 2px;
@@ -96,8 +101,6 @@ img {
   height:100%;
   min-height: 128px;
 }
-
-
 
 .grid-w2{
   grid-column-start: span 2;
@@ -150,7 +153,6 @@ img {
   
 }
 
-
 .preview {
   color: whitesmoke !important;
   bottom: 0px;
@@ -184,7 +186,7 @@ img {
 }
 
 .top-bar{
-  padding: 16px;
+  padding: 1em;
   background-color: #999999;
   display: flex;
   flex-direction: column;
@@ -196,8 +198,6 @@ img {
 .zoom-buttons{
   text-align: center;
 }
-
-
 
 .onoff {
   margin-left: 5px;

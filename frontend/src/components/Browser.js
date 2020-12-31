@@ -1,34 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from "react-hook-form";
+import { Link } from 'react-router-dom';
+import InfiniteScroll from "react-infinite-scroll-component";
 import Api from '../util/Api';
 import ValidationError from '../util/ValidationError';
 import Image from './Image';
 import FormField from './FormField';
+import ColorPalette from './ColorPicker';
 import '../CSS/browser.scss';
 import '../CSS/tooltip.scss';
-import ColorPalette from './ColorPicker';
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useParams, Link } from 'react-router-dom';
 
 export default function Browser({state, setState}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
     const [moreImages, setMoreImages] = useState(false);
     const [page, setPage] = useState(1);
     const [activeFilters, setActiveFilters] = useState([]);
     const inactiveFilters = ["Keyword", "Author", "Color count", "Size", "Date", "Transparency", "Tolerance"];
     const { register, watch, handleSubmit, control } = useForm({defaultValues: state.filters});
-    const { fields , append, remove } = useFieldArray({
-        control,
-        name: "filters",
-    });
+    const { fields , append, remove } = useFieldArray({control, name: "filters",});
 
     useEffect(()=>{
         if(state.filters && Object.keys(state.filters)){
             if (!Object.keys(state.filters).length == 0) {
-                for (const filter in state.filters) {
-                    addFilter(capitalize(filter));
-                }       
+                if(state.filters.keyword){
+                    addFilter("Keyword");
+                }
+                if(state.filters.author){
+                    addFilter("Author");
+                }
+                if(state.filters.colorMin && state.filters.colorMax){
+                    addFilter('Color count');
+                }
+                if(state.filters.sizeType && state.filters.width && state.filters.height){
+                    addFilter('Size');
+                }
+                if(state.filters.afterDate && state.filters.beforeDate){
+                    addFilter('Date');
+                }
+                if(state.filters.transparency){
+                    addFilter("Transparency");
+                }
+                if(state.filters.tolerance){
+                    addFilter("Tolerance");
+                }
+                else return;
             }
         }
     },[])
@@ -39,16 +56,12 @@ export default function Browser({state, setState}) {
         }
     }, [state])
 
-    const capitalize = (s) => {
-        if (typeof s !== 'string') return ''
-        return s.charAt(0).toUpperCase() + s.slice(1)
-    }
-
     const onSubmit = filters => {
         setPage(1);
         setMoreImages(true);
         setData([]);
         setLoading(true);
+        setMessage("Loading");
         setState(state => ({...state, filters}));
     };
 
@@ -69,28 +82,28 @@ export default function Browser({state, setState}) {
                     <p>Pixel Art by Color</p>
                     <Link className={"no-decoration"}  to={{pathname:'/about'}}><p>About</p></Link>
                 </div>
-                <p>Add a color or filter to get started</p>
+                <p style={{fontSize: '12px', margin: 0}}>Add a color or filter to get started</p>
                 
                 <h3>Color</h3>
 
                 <ColorPalette state={state} setState={setState}/>
                 
-                <p>
+                <div>
                     <h3>Add filter</h3>
                 
-                    <select
-                        
-                        onChange={e => addFilter(e.target.value)}>
+                    <select style={{marginBottom: '10px'}} onChange={e => addFilter(e.target.value)}>
                         <option value="empty">+</option>
                         {inactiveFilters.map((filter) =>
                             !activeFilters.includes(filter)&&
-                            <option key={filter} value={filter}>{filter}</option>
+                                <option key={filter} value={filter}>
+                                    {filter}
+                                </option>
                         )}
                     </select> 
-                </p>
+                </div>
                 
                 <form>
-                    <div>
+                    <div style={{marginBottom: '10px'}}>
                         {fields.map((field, index) => {
                             return (
                                 <div className="filter-box" key={field.id}>
@@ -105,6 +118,20 @@ export default function Browser({state, setState}) {
                     
                 </form>
             </div>
+
+            <h3 style={{color: '#eeeeee', margin: '1em'}}>                      
+                <span className="tooltip">
+                    <span className="tooltiptext">
+                        Sorted by date, newest to oldest.
+                    </span>
+                    {message}
+                </span>
+                {data.length > 0 && 
+                    <span className="float-right">
+                        {data.length == 50 ? data.length.toString() + "+" : data.length} entries found
+                    </span>
+                }
+            </h3>
             <ShowArtworks/>  
         </>
     )
@@ -112,31 +139,18 @@ export default function Browser({state, setState}) {
     function ShowArtworks() {
         return(
             <div>
-                <h3 style={{color: '#eeeeee', margin: '20px'}}>                      
-                            <span className="tooltip">
-                                <span className="tooltiptext">
-                                    Sorted by date, newest to oldest.
-                                </span>
-                                Results
-                            </span>
-                            <span className="float-right">
-                                {data.length == 50? data.length.toString() + "+" : data.length} entries found
-                            </span>
-                </h3>
-                    <InfiniteScroll
-                        className="grid-container"
-                        dataLength={data.length}
-                        next={getImages}
-                        hasMore={moreImages}
-                        loader={<p>Loading more images</p>}
-                    >
-                        {data.map((image, i) =>
-                            <Image image={image} key={i} state={state} setState={setState}/>
-                        )}
-                        {data.length === 50? <button onClick={()=>getImages()}>Load more</button>:null}
-                    </InfiniteScroll> 
-                    
-
+                <InfiniteScroll
+                    className="grid-container"
+                    dataLength={data.length}
+                    next={getImages}
+                    hasMore={moreImages}
+                    loader={<p>Loading more images</p>}
+                >
+                    {data.map((image, i) =>
+                        <Image image={image} key={i} state={state} setState={setState}/>
+                    )}
+                    {data.length === 50? <button onClick={()=>getImages()}>Load more</button>:null}
+                </InfiniteScroll>
             </div>
         )
     }
@@ -149,9 +163,11 @@ export default function Browser({state, setState}) {
         function onSucces(response){
             if (response.data.length > 0){
                 setLoading(false);
+                setMessage("Results");
                 setData(data.concat(response.data));
                 setPage(page+1);
             }else{
+                setMessage("No entries found");
                 setMoreImages(false);
             }
         }
